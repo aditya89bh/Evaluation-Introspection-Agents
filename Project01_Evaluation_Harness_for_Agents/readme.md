@@ -47,3 +47,54 @@ This project answers one question only:
 - Behavior modification (Project 3)
 
 ---
+
+## Evaluation Model
+
+Each agent run is evaluated using a **rubric-based scoring system**.
+
+### Example Criteria
+- Accuracy
+- Completeness
+- Constraint adherence
+- Clarity
+- Safety
+- Cost / latency (optional)
+
+Each criterion has:
+- a definition
+- a scoring range
+- a weight
+
+Final scores are computed deterministically.
+
+---
+
+## System Components
+
+### 1. Task Runner
+- Executes tasks using a fixed agent configuration
+- Ensures consistent prompts, tools, and memory settings
+
+---
+
+### 2. Rubric Engine
+- Defines evaluation criteria and weights
+- Supports task-specific rubrics
+- Produces structured score outputs
+
+---
+
+### 3. Judge Module
+- One or more evaluation prompts
+- Optional multi-judge aggregation
+- Produces criterion-level scores and comments
+
+---
+
+### 4. Run Logger
+- Stores task inputs, outputs, and scores
+- Enables cross-run comparison
+- Produces machine-readable evaluation records
+
+---
+
