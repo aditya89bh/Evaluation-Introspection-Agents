@@ -1,5 +1,5 @@
-# Project 3 – Reflection → Behavior Update Agent  
-_Closing the Evaluation–Introspection–Improvement Loop_
+# Project 3 – Evaluation → Introspection → Behavior Update Agent  
+_Reflection-Driven Self-Improvement for AI Agents_
 
 This project implements the **final control layer** in a three-part system for agent quality improvement.
 
