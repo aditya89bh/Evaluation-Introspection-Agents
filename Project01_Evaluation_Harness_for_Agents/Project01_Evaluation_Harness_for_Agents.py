@@ -101,3 +101,93 @@ class RunResult:
 # =========================
 # Rubric Engine
 # =========================
+
+def default_rubric() -> Rubric:
+    return Rubric(
+        name="Default Agent Quality Rubric",
+        criteria=[
+            Criterion(
+                name="accuracy",
+                description="Correctness of the answer relative to the task intent.",
+                scale_min=0, scale_max=5, weight=0.35
+            ),
+            Criterion(
+                name="completeness",
+                description="Covers all important parts of the request; minimal missing items.",
+                scale_min=0, scale_max=5, weight=0.25
+            ),
+            Criterion(
+                name="constraint_adherence",
+                description="Follows explicit constraints and avoids forbidden content.",
+                scale_min=0, scale_max=5, weight=0.20
+            ),
+            Criterion(
+                name="clarity",
+                description="Clear structure, easy to follow, actionable formatting.",
+                scale_min=0, scale_max=5, weight=0.20
+            ),
+        ],
+    )
+
+
+def aggregate_judges(
+    rubric: Rubric,
+    judge_results: List[JudgeResult],
+    strategy: str = "mean"
+) -> Dict[str, Any]:
+    """
+    Aggregates multiple judge results into final criterion scores and a weighted score.
+    strategy: "mean" (default) or "median" (not implemented; easy add)
+    """
+    if not judge_results:
+        raise ValueError("No judge results provided.")
+
+    # Collect per-criterion lists
+    per_crit: Dict[str, List[float]] = {c.name: [] for c in rubric.criteria}
+    notes_by_crit: Dict[str, List[str]] = {c.name: [] for c in rubric.criteria}
+
+    for jr in judge_results:
+        for c in rubric.criteria:
+            score = jr.criterion_scores.get(c.name, None)
+            if score is not None:
+                per_crit[c.name].append(float(score))
+            note = jr.criterion_notes.get(c.name, "")
+            if note:
+                notes_by_crit[c.name].append(f"[{jr.judge_name}] {note}")
+
+    # Aggregate
+    agg_scores: Dict[str, float] = {}
+    for c in rubric.criteria:
+        scores = per_crit[c.name]
+        if not scores:
+            agg_scores[c.name] = float(c.scale_min)
+        else:
+            if strategy == "mean":
+                agg_scores[c.name] = sum(scores) / len(scores)
+            else:
+                raise ValueError(f"Unknown aggregation strategy: {strategy}")
+
+        # Clamp to rubric scale
+        agg_scores[c.name] = clamp(agg_scores[c.name], c.scale_min, c.scale_max)
+
+    # Weighted total score on same 0..5 scale
+    wsum = rubric.weight_sum()
+    weighted = 0.0
+    for c in rubric.criteria:
+        weighted += agg_scores[c.name] * c.weight
+    weighted_score = safe_div(weighted, wsum)
+
+    # Compact notes
+    agg_notes = {k: " | ".join(v[:6]) for k, v in notes_by_crit.items()}  # cap notes
+    return {
+        "criterion_scores": agg_scores,
+        "weighted_score": weighted_score,
+        "aggregation_strategy": strategy,
+        "notes": agg_notes,
+    }
+
+
+# =========================
+# Agent (toy baseline)
+# Replace this with your actual reasoning/planning agent later.
+# =========================
