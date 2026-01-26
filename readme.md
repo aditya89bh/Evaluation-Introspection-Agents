@@ -154,3 +154,20 @@ This distinguishes introspection as a *functional mechanism*, not a narrative on
 This project operationalizes that idea.
 
 ---
+## Status
+
+Functional prototype  
+Evaluation loop implemented  
+Behavior updates active  
+Metrics logged per run
+
+---
+
+## Next Directions
+
+- Multi-agent shared introspection
+- Confidence-calibrated self-evaluation
+- External outcome-based feedback integration
+- Automated policy pruning
+
+---
