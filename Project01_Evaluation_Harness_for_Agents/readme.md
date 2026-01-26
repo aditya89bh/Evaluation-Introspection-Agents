@@ -22,3 +22,28 @@ This makes it impossible to answer basic questions like:
 This project treats **evaluation as infrastructure**, not an afterthought.
 
 ---
+
+## Core Objective
+
+> Provide a repeatable, transparent, and extensible evaluation harness for AI agents.
+
+This project answers one question only:
+> **“How good was the agent’s output?”**
+
+---
+
+## What This Project Covers (and What It Doesn’t)
+
+### In Scope
+- Task execution under controlled conditions
+- Explicit evaluation rubrics
+- Multi-criteria scoring
+- Baseline vs variant comparison
+- Run-level logging and aggregation
+
+### Out of Scope
+- Failure diagnosis (Project 2)
+- Self-critique or introspection
+- Behavior modification (Project 3)
+
+---
