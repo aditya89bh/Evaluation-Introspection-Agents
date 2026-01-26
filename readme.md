@@ -102,3 +102,55 @@ Future runs apply accumulated rules automatically, influencing:
 - evaluation strictness
 
 ---
+
+## What This Project Demonstrates
+
+- Reflection that **actually changes behavior**
+- Improvement that is **measured, not anecdotal**
+- Learning without fine-tuning
+- Failure patterns that decrease over time
+
+This distinguishes introspection as a *functional mechanism*, not a narrative one.
+
+---
+
+## Example Use Cases
+
+- Agent quality assurance
+- Prompt and policy regression testing
+- Tool-using agent reliability
+- Safety and alignment evaluation
+- Long-running autonomous agents
+
+---
+
+## Metrics Tracked
+
+- Average rubric score per run
+- Error frequency by category
+- Rule adoption count
+- Performance delta (baseline vs introspection-enabled)
+- Failure recurrence rate
+
+---
+
+## Relationship to Other Projects
+
+- Builds on **Reasoning + Planning Agents**
+- Extends **Evaluation Agents**
+- Enables **Continual Improvement Systems**
+- Serves as a foundation for:
+  - self-correcting agents
+  - autonomous long-horizon agents
+  - agent governance layers
+
+---
+
+## Key Insight
+
+> Intelligence is not just reasoning correctly once.  
+> Intelligence is **not repeating the same mistake twice**.
+
+This project operationalizes that idea.
+
+---
