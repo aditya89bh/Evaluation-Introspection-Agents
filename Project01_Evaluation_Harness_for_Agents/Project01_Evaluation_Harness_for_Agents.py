@@ -317,6 +317,155 @@ def llm_judge_stub(task: Task, output: str, rubric: Rubric, judge_name: str = "l
 # Harness Runner
 # =========================
 
+def run_evaluation(
+    tasks: List[Task],
+    rubric: Rubric,
+    agent_config: AgentConfig,
+    log_path: str = "runs/project1_eval_harness.jsonl",
+    n_runs_per_task: int = 1,
+    use_llm_judge: bool = False,
+) -> List[RunResult]:
+    results: List[RunResult] = []
+
+    for task in tasks:
+        for i in range(n_runs_per_task):
+            run_id = str(uuid.uuid4())
+            ts = now_iso()
+
+            # Run agent
+            output = baseline_agent(task, agent_config)
+
+            # Judge (multi-judge ready)
+            judge_results: List[JudgeResult] = []
+            judge_results.append(heuristic_judge(task, output, rubric, judge_name="heuristic_judge_v1"))
+
+            # Optional: add another heuristic judge variant (simulates multi-judge)
+            judge_results.append(heuristic_judge(task, output, rubric, judge_name="heuristic_judge_v1_clone"))
+
+            if use_llm_judge:
+                # Plug your LLM judge here
+                judge_results.append(llm_judge_stub(task, output, rubric, judge_name="llm_judge_v1"))
+
+            aggregated = aggregate_judges(rubric, judge_results, strategy="mean")
+
+            record = RunResult(
+                run_id=run_id,
+                timestamp=ts,
+                agent=asdict(agent_config),
+                task=asdict(task),
+                output=output,
+                judge_results=[asdict(jr) for jr in judge_results],
+                aggregated=aggregated,
+            )
+
+            jsonl_append(log_path, asdict(record))
+            results.append(record)
+
+    return results
+
+
+def print_summary(results: List[RunResult], rubric: Rubric) -> None:
+    if not results:
+        print("No results.")
+        return
+
+    # Aggregate per task
+    by_task: Dict[str, List[float]] = {}
+    for r in results:
+        tid = r.task["task_id"]
+        by_task.setdefault(tid, []).append(float(r.aggregated["weighted_score"]))
+
+    print("\n=== Evaluation Summary ===")
+    print(f"Runs: {len(results)}")
+    print(f"Rubric: {rubric.name}")
+    print("")
+
+    # Header
+    print(f"{'Task ID':<16} {'Avg Score (0-5)':<16} {'Runs':<6}")
+    print("-" * 42)
+    for tid, scores in by_task.items():
+        avg = sum(scores) / len(scores)
+        print(f"{tid:<16} {avg:<16.2f} {len(scores):<6}")
+
+    # Overall
+    overall = sum(float(r.aggregated["weighted_score"]) for r in results) / len(results)
+    print("\nOverall Avg Score:", f"{overall:.2f} / 5.00")
+
+    # Criterion averages overall
+    crit_sums: Dict[str, float] = {c.name: 0.0 for c in rubric.criteria}
+    for r in results:
+        for c in rubric.criteria:
+            crit_sums[c.name] += float(r.aggregated["criterion_scores"].get(c.name, 0.0))
+    print("\nCriterion Averages:")
+    for c in rubric.criteria:
+        avg = crit_sums[c.name] / len(results)
+        print(f"- {c.name}: {avg:.2f} / 5.00 (weight {c.weight})")
+
+
+# =========================
+# Demo Tasks (replace with your own benchmark set)
+# =========================
+
+def demo_tasks() -> List[Task]:
+    return [
+        Task(
+            task_id="T001",
+            title="Write a project summary",
+            prompt="Summarize what this agent does in 5 bullet points.",
+            task_type="writing",
+            expected_keywords=["summarize", "agent", "bullet", "points"],
+            must_include_constraints=["bullet"],
+        ),
+        Task(
+            task_id="T002",
+            title="Plan a small project",
+            prompt="Create a 3-step plan to build an evaluation harness for agents.",
+            task_type="planning",
+            expected_keywords=["plan", "rubric", "score", "log"],
+            must_include_constraints=["3-step", "evaluation", "harness"],
+        ),
+        Task(
+            task_id="T003",
+            title="Constraint following check",
+            prompt="Give a concise answer under 80 words and include exactly 3 bullets.",
+            task_type="constraints",
+            expected_keywords=["bullets"],
+            must_include_constraints=["3 bullets"],
+            forbidden_keywords=["lorem", "ipsum"],
+        ),
+    ]
+
+
+# =========================
+# Main
+# =========================
+
+if __name__ == "__main__":
+    rubric = default_rubric()
+    tasks = demo_tasks()
+
+    config = AgentConfig(
+        agent_name="baseline_agent",
+        version="v1",
+        temperature=0.2,
+        notes="Project 1 evaluation harness demo run"
+    )
+
+    log_path = "runs/project1_eval_harness.jsonl"
+
+    results = run_evaluation(
+        tasks=tasks,
+        rubric=rubric,
+        agent_config=config,
+        log_path=log_path,
+        n_runs_per_task=2,
+        use_llm_judge=False,  # set True after you implement llm_judge_stub
+    )
+
+    print_summary(results, rubric)
+
+    print("\nLog written to:", log_path)
+    print("Tip: Open the JSONL to inspect per-run rubric scores and judge notes.")
 
 # =========================
 # Agent (toy baseline)
