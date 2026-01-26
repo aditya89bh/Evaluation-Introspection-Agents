@@ -1,173 +1,180 @@
-# Project 3 – Evaluation → Introspection → Behavior Update Agent  
-_Reflection-Driven Self-Improvement for AI Agents_
+# Project 3 – Reflection → Behavior Update Agent  
+_Closing the Evaluation–Introspection–Improvement Loop_
 
-This project implements a **closed-loop self-improvement system** for AI agents, where the agent:
+This project implements the **final control layer** in a three-part system for agent quality improvement.
 
-1. Evaluates its own performance
-2. Diagnoses *why* it succeeded or failed
-3. Converts insights into **explicit behavior rules**
-4. Applies those rules in future runs
-5. Demonstrates **measurable improvement over time**
+While earlier projects focus on **measuring** and **diagnosing** agent behavior, this project focuses on the hardest part:
 
-This moves agents beyond static reasoning into **adaptive, learning-oriented systems** without retraining.
+> **Converting reflection into persistent behavior change.**
+
+---
+
+## Project Context: The Three-Stage Agent Improvement Stack
+
+This work is part of a structured progression:
+
+### Project 1 – Evaluation Harness for Agents
+**Purpose:** Measure agent performance rigorously  
+- Explicit rubrics and criteria
+- Repeatable scoring across runs
+- Baseline vs variant comparisons
+
+Answers the question:
+> *“How good was the agent’s output?”*
+
+---
+
+### Project 2 – Introspection & Root Cause Analysis
+**Purpose:** Diagnose why the agent succeeded or failed  
+- Structured self-critique
+- Error taxonomy (assumptions, constraints, tool misuse, etc.)
+- Machine-readable introspection reports
+
+Answers the question:
+> *“Why did the agent behave this way?”*
+
+---
+
+### Project 3 – Reflection → Behavior Update Agent (This Project)
+**Purpose:** Make the agent improve over time  
+- Translate introspection into explicit behavior rules
+- Store and version those rules
+- Apply them automatically in future executions
+- Demonstrate measurable improvement
+
+Answers the question:
+> *“What should the agent do differently next time?”*
 
 ---
 
 ## Why This Project Exists
 
-Most agents today can:
-- reason
-- plan
-- execute
+Most agent systems stop at:
+- evaluation scores
+- self-critique narratives
 
-But they **do not get better**.
+But:
+- critiques don’t change behavior
+- mistakes repeat
+- learning remains implicit
 
-They may critique outputs, but:
-- critiques don’t change future behavior
-- failures repeat across runs
-- learning remains implicit and brittle
-
-This project treats **introspection as a control signal**, not commentary.
+This project treats **reflection as a control signal**, not commentary.
 
 ---
 
 ## Core Hypothesis
 
-> An agent that can convert evaluation feedback into explicit behavioral rules will show measurable performance improvements across repeated tasks.
+> Agents that convert evaluation feedback into explicit, reusable behavior rules will show measurable improvement across repeated tasks without retraining.
 
 ---
 
-## System Overview
+## System Role and Boundaries
 
-The agent operates in a five-stage loop:
+**This project assumes the existence of:**
+- an evaluation harness (Project 1)
+- a structured introspection module (Project 2)
 
-1. **Task Execution**
-2. **Multi-Criteria Evaluation**
-3. **Root-Cause Introspection**
-4. **Behavior Rule Synthesis**
-5. **Policy-Guided Re-Execution**
-
-Each cycle produces artifacts that are logged, scored, and reused.
+**This project is responsible for:**
+- synthesizing behavior rules from introspection
+- applying those rules during future planning and execution
+- tracking whether those rules reduce failures
 
 ---
 
-## Key Components
+## Core Components
 
-### 1. Evaluation Engine
-- Scores outputs using explicit rubrics
-- Supports multiple criteria:
-  - Accuracy
-  - Completeness
-  - Constraint adherence
-  - Clarity
-  - Safety
-- Enables before vs after comparisons
+### 1. Introspection Input
+Consumes structured outputs from Project 2:
+- failure categories
+- root causes
+- confidence gaps
+- uncertainty signals
 
-### 2. Error Taxonomy
-Failures are categorized into structured types:
-- Missing constraints
-- Incorrect assumptions
-- Overconfidence
-- Tool misuse
-- Memory retrieval failure
-- Overplanning or underplanning
+---
 
-This allows pattern-level diagnosis instead of surface critique.
-
-### 3. Introspection Report
-After each run, the agent generates a structured self-analysis:
-
-- Goal
-- Plan summary
-- Key assumptions
-- Uncertainties
-- Failure causes (from taxonomy)
-- Improvement insights
-
-This report is machine-readable and reusable.
-
-### 4. Behavior Rule Generator
-Introspection insights are converted into **explicit rules**, such as:
+### 2. Behavior Rule Generator
+Converts introspection insights into explicit rules, such as:
 - “List constraints before planning.”
-- “Ask clarifying questions if confidence is low.”
-- “Retrieve memory only after task classification.”
+- “Ask clarifying questions if confidence < threshold.”
+- “Delay memory retrieval until task type is classified.”
 
-Rules are stored and versioned.
+Rules are stored, versioned, and reusable.
 
-### 5. Policy-Guided Execution
-Future runs apply accumulated rules automatically, influencing:
-- planning order
-- tool usage
-- memory retrieval
-- evaluation strictness
+---
+
+### 3. Policy Store
+- Maintains active behavior rules
+- Tracks rule origin and effectiveness
+- Enables rollback or pruning of ineffective rules
+
+---
+
+### 4. Policy-Guided Execution
+During future runs:
+- planning order is modified
+- tool usage is constrained
+- memory retrieval is gated
+- evaluation strictness is adjusted
+
+This is where learning becomes visible.
 
 ---
 
 ## What This Project Demonstrates
 
-- Reflection that **actually changes behavior**
-- Improvement that is **measured, not anecdotal**
+- Reflection that **changes execution**
 - Learning without fine-tuning
-- Failure patterns that decrease over time
+- Reduced failure recurrence
+- Measurable improvement across runs
 
-This distinguishes introspection as a *functional mechanism*, not a narrative one.
-
----
-
-## Example Use Cases
-
-- Agent quality assurance
-- Prompt and policy regression testing
-- Tool-using agent reliability
-- Safety and alignment evaluation
-- Long-running autonomous agents
+This is the difference between:
+> *an agent that can explain itself*  
+and  
+> *an agent that gets better*
 
 ---
 
 ## Metrics Tracked
 
-- Average rubric score per run
-- Error frequency by category
-- Rule adoption count
-- Performance delta (baseline vs introspection-enabled)
-- Failure recurrence rate
+- Performance delta (baseline vs policy-guided)
+- Error recurrence rate
+- Rule adoption frequency
+- Rule effectiveness over time
+- Failure category distribution
 
 ---
 
-## Relationship to Other Projects
+## Relationship to Other Work
 
-- Builds on **Reasoning + Planning Agents**
-- Extends **Evaluation Agents**
-- Enables **Continual Improvement Systems**
-- Serves as a foundation for:
+- Builds on **Reasoning & Planning Agents**
+- Completes the **Evaluation → Introspection → Improvement loop**
+- Forms the basis for:
   - self-correcting agents
-  - autonomous long-horizon agents
-  - agent governance layers
+  - long-horizon autonomous systems
+  - agent governance and QA layers
 
 ---
 
 ## Key Insight
 
-> Intelligence is not just reasoning correctly once.  
+> Intelligence is not avoiding mistakes.  
 > Intelligence is **not repeating the same mistake twice**.
 
-This project operationalizes that idea.
+This project operationalizes that principle.
 
 ---
+
 ## Status
 
 Functional prototype  
-Evaluation loop implemented  
-Behavior updates active  
-Metrics logged per run
+Policy updates active  
+Metrics logged per run  
 
 ---
 
-## Next Directions
+## Future Extensions
 
-- Multi-agent shared introspection
-- Confidence-calibrated self-evaluation
-- External outcome-based feedback integration
-- Automated policy pruning
-
----
+- Multi-agent shared policy learning
+- Confidence-calibrated rule activation
+- Outcome-based external feedback
+- Automated rule pruning
