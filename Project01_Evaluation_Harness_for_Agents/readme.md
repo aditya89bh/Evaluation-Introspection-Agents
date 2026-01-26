@@ -98,3 +98,59 @@ Final scores are computed deterministically.
 
 ---
 
+## Metrics Produced
+
+- Per-run rubric scores
+- Weighted final score
+- Score variance across runs
+- Performance deltas between agent versions
+
+These metrics form the baseline for later improvement.
+
+---
+
+## Example Use Cases
+
+- Comparing prompt variants
+- Evaluating memory configurations
+- Regression testing agent behavior
+- Benchmarking planning strategies
+- Cost vs quality trade-off analysis
+
+---
+
+## Relationship to Other Projects
+
+This project is the **first layer** in a three-stage agent improvement stack:
+
+1. **Evaluation Harness for Agents** (this project)
+2. Introspection & Root Cause Analysis
+3. Evaluation & Introspection Agents (behavior update loop)
+
+All downstream learning depends on the reliability of this layer.
+
+---
+
+## Key Insight
+
+> You cannot improve what you cannot measure.
+
+This project makes agent performance measurable.
+
+---
+
+## Status
+
+Functional evaluation harness  
+Rubric-based scoring implemented  
+Run-level metrics logged  
+
+---
+
+## Next Directions
+
+- Task-specific rubric libraries
+- Automatic baseline generation
+- Cost-aware evaluation
+- Human-in-the-loop scoring integration
+
