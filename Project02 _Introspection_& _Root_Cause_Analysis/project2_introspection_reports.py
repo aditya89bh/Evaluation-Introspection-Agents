@@ -433,3 +433,19 @@ def print_project2_summary(reports: List[IntrospectionReport]) -> None:
 # =========================
 # Main
 # =========================
+
+if __name__ == "__main__":
+    input_path = "runs/project1_eval_harness.jsonl"
+    output_path = "runs/project2_introspection_reports.jsonl"
+
+    reports = run_project2(
+        input_jsonl=input_path,
+        output_jsonl=output_path,
+        weak_threshold=2.5,
+        overwrite_output=True,
+    )
+
+    print_project2_summary(reports)
+
+    print("\nIntrospection reports written to:", output_path)
+    print("Tip: open the JSONL and inspect findings + evidence + improvement_hints per run.")
