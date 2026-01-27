@@ -93,3 +93,34 @@ Reports are designed to be **machine-consumable**, not narrative-only.
 
 ---
 
+## System Components
+
+### 1. Signal Extractor
+- Reads evaluation scores and notes
+- Detects weak dimensions and anomalies
+
+---
+
+### 2. Failure Classifier
+- Maps signals to error taxonomy categories
+- Supports multiple simultaneous failure causes
+
+---
+
+### 3. Introspection Generator
+- Produces structured diagnostic reports
+- Separates symptoms from root causes
+
+---
+
+## What This Project Demonstrates
+
+- Diagnosis without behavior change
+- Failure understanding without learning
+- Explainability grounded in metrics
+- Repeatable introspection across tasks
+
+This project turns evaluation data into **insight**, not opinion.
+
+---
+
