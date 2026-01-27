@@ -372,3 +372,64 @@ def generate_introspection_report(run: Dict[str, Any], weak_threshold: float = 2
 # =========================
 # Batch Runner
 # =========================
+
+def run_project2(
+    input_jsonl: str = "runs/project1_eval_harness.jsonl",
+    output_jsonl: str = "runs/project2_introspection_reports.jsonl",
+    weak_threshold: float = 2.5,
+    overwrite_output: bool = True,
+) -> List[IntrospectionReport]:
+    runs = read_jsonl(input_jsonl)
+
+    if overwrite_output and os.path.exists(output_jsonl):
+        os.remove(output_jsonl)
+
+    reports: List[IntrospectionReport] = []
+    for run in runs:
+        report = generate_introspection_report(run, weak_threshold=weak_threshold)
+        jsonl_append(output_jsonl, asdict(report))
+        reports.append(report)
+
+    return reports
+
+
+def print_project2_summary(reports: List[IntrospectionReport]) -> None:
+    if not reports:
+        print("No reports generated.")
+        return
+
+    cat_counter = Counter()
+    primary_counter = Counter()
+    weak_counter = Counter()
+
+    for r in reports:
+        for f in r.findings:
+            cat_counter[f.category] += 1
+        if r.primary_cause:
+            primary_counter[r.primary_cause] += 1
+        for wc in r.weak_criteria:
+            weak_counter[wc] += 1
+
+    print("\n=== Project 2 Summary ===")
+    print("Reports:", len(reports))
+    print("\nTop failure categories:")
+    for cat, n in cat_counter.most_common(8):
+        print(f"- {cat}: {n}")
+
+    print("\nTop primary causes:")
+    for cat, n in primary_counter.most_common(8):
+        print(f"- {cat}: {n}")
+
+    print("\nMost common weak criteria (from Project 1 rubric):")
+    for c, n in weak_counter.most_common(8):
+        print(f"- {c}: {n}")
+
+    avg_conf = sum(r.confidence for r in reports) / len(reports)
+    avg_score = sum(r.weighted_score for r in reports) / len(reports)
+    print(f"\nAvg diagnosis confidence: {avg_conf:.2f} (0..1)")
+    print(f"Avg weighted score: {avg_score:.2f} (0..5)")
+
+
+# =========================
+# Main
+# =========================
