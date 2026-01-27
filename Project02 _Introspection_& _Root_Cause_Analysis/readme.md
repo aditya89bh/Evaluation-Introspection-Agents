@@ -124,3 +124,39 @@ This project turns evaluation data into **insight**, not opinion.
 
 ---
 
+## Relationship to Other Projects
+
+This project is the **second layer** in a three-stage agent improvement stack:
+
+1. Evaluation Harness for Agents (measurement)
+2. **Introspection & Root Cause Analysis (this project)**
+3. Evaluation & Introspection Agents (behavior update loop)
+
+It bridges raw metrics and adaptive behavior.
+
+---
+
+## Key Insight
+
+> Improvement requires diagnosis.  
+> Diagnosis requires structure.
+
+This project provides that structure.
+
+---
+
+## Status
+
+Introspection pipeline defined  
+Error taxonomy implemented  
+Structured reports generated per run  
+
+---
+
+## Next Directions
+
+- Cross-run failure pattern aggregation
+- Confidence calibration analysis
+- Human-in-the-loop diagnosis validation
+- Integration with behavior update systems
+
