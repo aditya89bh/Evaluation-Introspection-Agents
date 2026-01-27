@@ -29,6 +29,117 @@ from collections import Counter, defaultdict
 # Utilities
 # =========================
 
+def classify_failures(
+    run: Dict[str, Any],
+    weak_criteria: List[str],
+    output_signals: Dict[str, Any],
+    judge_notes: Dict[str, str],
+) -> Tuple[List[IntrospectionFinding], float]:
+    """
+    Produces a list of findings + a confidence score for the diagnosis.
+    Confidence is heuristic: increases with strong, consistent signals across sources.
+    """
+    findings: List[IntrospectionFinding] = []
+    evidence_pool: List[str] = []
+
+    # Build evidence snippets
+    for crit, note in judge_notes.items():
+        if note:
+            evidence_pool.append(f"{crit}: {note}")
+
+    # Helper to add a finding
+    def add(category: str, severity: float, evidence: List[str]) -> None:
+        findings.append(IntrospectionFinding(category=category, severity=clamp(severity, 0.0, 1.0), evidence=evidence[:6]))
+
+    # 1) Constraints issues
+    if "constraint_adherence" in weak_criteria or output_signals.get("constraints_missing", 0) > 0 or output_signals.get("forbidden_hits", 0) > 0:
+        sev = 0.4
+        ev = []
+        if output_signals.get("constraints_missing", 0) > 0:
+            sev += 0.3
+            ev.append(f"Missing constraints count: {output_signals['constraints_missing']}")
+        if output_signals.get("forbidden_hits", 0) > 0:
+            sev += 0.3
+            ev.append(f"Forbidden keyword hits: {output_signals['forbidden_hits']}")
+        if "constraint_adherence" in judge_notes:
+            ev.append(judge_notes["constraint_adherence"])
+        add("missing_constraints", sev, ev or evidence_pool)
+
+    # 2) Accuracy issues -> unsupported claims / incorrect assumptions
+    if "accuracy" in weak_criteria:
+        sev = 0.5
+        ev = []
+        if output_signals.get("keyword_total", 0) > 0:
+            hit_ratio = output_signals.get("keyword_hits", 0) / max(1, output_signals.get("keyword_total", 1))
+            if hit_ratio < 0.4:
+                sev += 0.2
+                ev.append(f"Low keyword coverage ratio: {hit_ratio:.2f}")
+        if "accuracy" in judge_notes:
+            ev.append(judge_notes["accuracy"])
+
+        # Split into two likely causes: unsupported_claims vs incorrect_assumptions
+        # Without external ground truth we keep it conservative and label as unsupported_claims.
+        add("unsupported_claims", sev, ev or evidence_pool)
+
+    # 3) Completeness issues -> underplanning / incomplete_reasoning
+    if "completeness" in weak_criteria:
+        sev = 0.45
+        ev = []
+        if output_signals.get("length_chars", 0) < 120:
+            sev += 0.25
+            ev.append(f"Output too short: {output_signals['length_chars']} chars")
+        if not output_signals.get("has_bullets", False):
+            sev += 0.15
+            ev.append("No structural bullets detected")
+        if "completeness" in judge_notes:
+            ev.append(judge_notes["completeness"])
+
+        # Map to underplanning / incomplete_reasoning
+        add("underplanning", sev, ev)
+
+    # 4) Clarity issues -> clarity_structure_issues
+    if "clarity" in weak_criteria:
+        sev = 0.4
+        ev = []
+        if output_signals.get("length_chars", 0) < 80:
+            sev += 0.2
+            ev.append("Very short response; likely unclear")
+        if "clarity" in judge_notes:
+            ev.append(judge_notes["clarity"])
+        add("clarity_structure_issues", sev, ev)
+
+    # 5) Overconfidence vs uncertainty signaling
+    # If accuracy is weak but it never signals uncertainty, flag overconfidence.
+    if ("accuracy" in weak_criteria) and (not output_signals.get("mentions_uncertainty", False)):
+        ev = ["Weak accuracy + no uncertainty language detected"]
+        add("overconfidence_low_uncertainty", 0.55, ev)
+
+    # Deduplicate categories (keep max severity)
+    by_cat: Dict[str, IntrospectionFinding] = {}
+    for f in findings:
+        if f.category not in by_cat or f.severity > by_cat[f.category].severity:
+            by_cat[f.category] = f
+    findings = list(by_cat.values())
+
+    # Confidence heuristic
+    # More consistent signals -> higher confidence.
+    # If we found at least 2 categories with evidence, confidence rises.
+    base_conf = 0.45
+    base_conf += 0.10 * min(3, len(findings))
+    # Add boost if judge notes exist
+    if any(judge_notes.values()):
+        base_conf += 0.10
+    # Add boost if task metadata has constraints/keywords (clearer expectations)
+    if output_signals.get("keyword_total", 0) > 0 or output_signals.get("constraints_missing", 0) > 0:
+        base_conf += 0.10
+
+    return findings, clamp(base_conf, 0.0, 0.95)
+
+
+# =========================
+# Improvement Hint Generator (non-binding)
+# =========================
+
 def extract_weak_criteria(criterion_scores: Dict[str, float], threshold: float = 2.5) -> List[str]:
     """
     Marks criteria as weak if score < threshold on a 0..5 scale.
