@@ -92,3 +92,4 @@ Each agent run produces a structured report containing:
 Reports are designed to be **machine-consumable**, not narrative-only.
 
 ---
+
