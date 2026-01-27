@@ -29,6 +29,76 @@ from collections import Counter, defaultdict
 # Utilities
 # =========================
 
+def extract_weak_criteria(criterion_scores: Dict[str, float], threshold: float = 2.5) -> List[str]:
+    """
+    Marks criteria as weak if score < threshold on a 0..5 scale.
+    """
+    weak = []
+    for k, v in criterion_scores.items():
+        try:
+            if float(v) < threshold:
+                weak.append(k)
+        except Exception:
+            continue
+    return weak
+
+def extract_judge_notes(run: Dict[str, Any]) -> Dict[str, str]:
+    """
+    Aggregated judge notes from Project 1 are already available in run["aggregated"]["notes"].
+    If missing, we fallback to per-judge notes.
+    """
+    agg = run.get("aggregated", {})
+    notes = agg.get("notes")
+    if isinstance(notes, dict) and notes:
+        return {k: str(v) for k, v in notes.items()}
+
+    # fallback: merge first judge notes
+    jr = run.get("judge_results", [])
+    if jr and isinstance(jr, list):
+        first = jr[0]
+        cn = first.get("criterion_notes", {})
+        if isinstance(cn, dict):
+            return {k: str(v) for k, v in cn.items()}
+
+    return {}
+
+def extract_output_signals(task: Dict[str, Any], output: str) -> Dict[str, Any]:
+    """
+    Lightweight signals from output text and task metadata.
+    Works even without tools or LLM.
+    """
+    out = output or ""
+    out_norm = normalize_text(out)
+
+    has_bullets = ("- " in out) or ("•" in out)
+    length_chars = len(out)
+    mentions_uncertainty = any(w in out_norm for w in ["not sure", "uncertain", "might be", "i think", "low confidence", "cannot confirm"])
+
+    expected_keywords = task.get("expected_keywords") or []
+    forbidden_keywords = task.get("forbidden_keywords") or []
+    must_constraints = task.get("must_include_constraints") or []
+
+    kw_hits = sum(1 for k in expected_keywords if normalize_text(k) in out_norm) if expected_keywords else 0
+    kw_total = len(expected_keywords)
+
+    forb_hits = sum(1 for k in forbidden_keywords if normalize_text(k) in out_norm) if forbidden_keywords else 0
+    constraints_missing = sum(1 for c in must_constraints if normalize_text(c) not in out_norm) if must_constraints else 0
+
+    return {
+        "has_bullets": has_bullets,
+        "length_chars": length_chars,
+        "mentions_uncertainty": mentions_uncertainty,
+        "keyword_hits": kw_hits,
+        "keyword_total": kw_total,
+        "forbidden_hits": forb_hits,
+        "constraints_missing": constraints_missing,
+    }
+
+
+# =========================
+# Failure Classification
+# =========================
+
 def read_jsonl(path: str) -> List[Dict[str, Any]]:
     if not os.path.exists(path):
         raise FileNotFoundError(f"JSONL file not found: {path}")
