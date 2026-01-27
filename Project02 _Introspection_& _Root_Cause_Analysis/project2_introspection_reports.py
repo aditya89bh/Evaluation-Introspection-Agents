@@ -296,3 +296,79 @@ class IntrospectionReport:
 # =========================
 # Signal Extraction
 # =========================
+
+def improvement_hints_from_findings(findings: List[IntrospectionFinding]) -> List[str]:
+    hints: List[str] = []
+    cats = {f.category for f in findings}
+
+    if "missing_constraints" in cats:
+        hints.append("Add a 'constraints extraction' step before planning or answering.")
+        hints.append("Echo constraints explicitly and check compliance before final output.")
+
+    if "underplanning" in cats:
+        hints.append("Increase structure: outline steps or sections before writing the response.")
+        hints.append("Add a checklist to ensure all requested parts are covered.")
+
+    if "clarity_structure_issues" in cats:
+        hints.append("Use headings or bullets; avoid dense paragraphs.")
+        hints.append("End with a concise summary of decisions or next actions.")
+
+    if "unsupported_claims" in cats:
+        hints.append("Separate facts from assumptions; add a 'confidence/uncertainty' line when unsure.")
+        hints.append("Request missing info or cite sources when making factual claims.")
+
+    if "overconfidence_low_uncertainty" in cats:
+        hints.append("Introduce uncertainty signaling when accuracy is uncertain (e.g., ask clarifying questions).")
+
+    # Keep it short
+    return hints[:6]
+
+
+# =========================
+# Report Generator
+# =========================
+
+def generate_introspection_report(run: Dict[str, Any], weak_threshold: float = 2.5) -> IntrospectionReport:
+    run_id = run.get("run_id", "")
+    task = run.get("task", {}) or {}
+    agent = run.get("agent", {}) or {}
+
+    aggregated = run.get("aggregated", {}) or {}
+    weighted_score = float(aggregated.get("weighted_score", 0.0))
+    criterion_scores = aggregated.get("criterion_scores", {}) or {}
+
+    weak_criteria = extract_weak_criteria(criterion_scores, threshold=weak_threshold)
+    judge_notes = extract_judge_notes(run)
+    output = run.get("output", "") or ""
+
+    output_signals = extract_output_signals(task, output)
+    findings, confidence = classify_failures(run, weak_criteria, output_signals, judge_notes)
+
+    # Primary cause = highest severity category (if any)
+    primary = None
+    if findings:
+        primary = sorted(findings, key=lambda f: f.severity, reverse=True)[0].category
+
+    hints = improvement_hints_from_findings(findings)
+
+    return IntrospectionReport(
+        run_id=run_id,
+        task_id=str(task.get("task_id", "")),
+        task_title=str(task.get("title", "")),
+        task_type=str(task.get("task_type", "")),
+        agent_name=str(agent.get("agent_name", "")),
+        agent_version=str(agent.get("version", "")),
+        weighted_score=weighted_score,
+        criterion_scores={k: float(v) for k, v in criterion_scores.items()},
+        weak_criteria=weak_criteria,
+        findings=findings,
+        primary_cause=primary,
+        confidence=confidence,
+        improvement_hints=hints,
+        judge_notes_excerpt=judge_notes,
+    )
+
+
+# =========================
+# Batch Runner
+# =========================
