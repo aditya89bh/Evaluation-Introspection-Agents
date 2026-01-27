@@ -28,3 +28,35 @@ from collections import Counter, defaultdict
 # =========================
 # Utilities
 # =========================
+
+def read_jsonl(path: str) -> List[Dict[str, Any]]:
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"JSONL file not found: {path}")
+    records: List[Dict[str, Any]] = []
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            records.append(json.loads(line))
+    return records
+
+def jsonl_append(path: str, record: Dict[str, Any]) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True) if os.path.dirname(path) else None
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+def normalize_text(s: str) -> str:
+    return re.sub(r"\s+", " ", (s or "").strip().lower())
+
+def contains_any(text: str, phrases: List[str]) -> bool:
+    t = normalize_text(text)
+    return any(normalize_text(p) in t for p in phrases)
+
+def clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+
+
+# =========================
+# Taxonomy
+# =========================
