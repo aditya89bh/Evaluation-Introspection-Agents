@@ -62,3 +62,33 @@ All inputs are assumed to be produced by **Project 1 – Evaluation Harness**.
 
 ---
 
+## Error Taxonomy
+
+Failures are classified into explicit categories such as:
+- Missing or misunderstood constraints
+- Incorrect or unsupported assumptions
+- Incomplete reasoning or planning gaps
+- Tool misuse or overuse
+- Overconfidence or lack of uncertainty signaling
+- Memory retrieval failure
+- Overplanning or underplanning
+
+This taxonomy allows pattern-level analysis across runs.
+
+---
+
+## Introspection Report Structure
+
+Each agent run produces a structured report containing:
+
+- Task summary
+- Evaluation highlights
+- Primary failure categories
+- Supporting evidence from judge notes
+- Confidence and uncertainty signals
+- Hypothesized root causes
+- Improvement hints (non-binding)
+
+Reports are designed to be **machine-consumable**, not narrative-only.
+
+---
