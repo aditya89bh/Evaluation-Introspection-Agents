@@ -60,3 +60,58 @@ def clamp(x: float, lo: float, hi: float) -> float:
 # =========================
 # Taxonomy
 # =========================
+
+ERROR_TAXONOMY = [
+    "missing_constraints",
+    "misunderstood_constraints",
+    "incorrect_assumptions",
+    "unsupported_claims",
+    "incomplete_reasoning",
+    "tool_misuse",
+    "overconfidence_low_uncertainty",
+    "memory_retrieval_failure",
+    "overplanning",
+    "underplanning",
+    "clarity_structure_issues",
+]
+
+
+# =========================
+# Data Models
+# =========================
+
+@dataclass
+class IntrospectionFinding:
+    category: str
+    severity: float  # 0..1
+    evidence: List[str]
+
+@dataclass
+class IntrospectionReport:
+    run_id: str
+    task_id: str
+    task_title: str
+    task_type: str
+    agent_name: str
+    agent_version: str
+
+    # Inputs summary
+    weighted_score: float
+    criterion_scores: Dict[str, float]
+    weak_criteria: List[str]
+
+    # Diagnostics
+    findings: List[IntrospectionFinding]
+    primary_cause: Optional[str]
+    confidence: float  # 0..1 (confidence in diagnosis)
+
+    # Optional hints (non-binding; Project 3 will turn these into rules)
+    improvement_hints: List[str]
+
+    # Traceability
+    judge_notes_excerpt: Dict[str, str]
+
+
+# =========================
+# Signal Extraction
+# =========================
