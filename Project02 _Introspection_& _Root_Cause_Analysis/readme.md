@@ -23,3 +23,42 @@ does not explain:
 This project fills that gap by converting evaluation data into **explicit root-cause explanations**.
 
 ---
+
+## Core Objective
+
+> Transform evaluation outcomes into structured diagnostic insight.
+
+This project answers one question only:
+> **“Why did the agent behave this way?”**
+
+---
+
+## Scope and Boundaries
+
+### In Scope
+- Analysis of evaluation results from Project 1
+- Failure pattern detection
+- Root cause classification
+- Structured introspection reports
+- Machine-readable diagnostic outputs
+
+### Out of Scope
+- Scoring or judging outputs (Project 1)
+- Behavior modification or learning (Project 3)
+- Prompt or policy updates
+
+---
+
+## Inputs
+
+This project consumes:
+- rubric scores
+- judge notes
+- task metadata
+- agent configuration
+- agent output text
+
+All inputs are assumed to be produced by **Project 1 – Evaluation Harness**.
+
+---
+
