@@ -146,3 +146,79 @@ def aggregate_judges(rubric: Rubric, judge_results: List[Dict[str, Any]], strate
 # Heuristic Judge (same spirit as Project 1)
 # =========================
 
+def heuristic_judge(task: Dict[str, Any], output: str, judge_name: str = "heuristic_judge_v1") -> Dict[str, Any]:
+    out = output or ""
+    out_lower = normalize_text(out)
+
+    expected_keywords = task.get("expected_keywords") or []
+    forbidden_keywords = task.get("forbidden_keywords") or []
+    must_constraints = task.get("must_include_constraints") or []
+
+    kw_total = len(expected_keywords)
+    kw_hits = sum(1 for k in expected_keywords if normalize_text(k) in out_lower) if expected_keywords else 0
+
+    forb_hits = sum(1 for k in forbidden_keywords if normalize_text(k) in out_lower) if forbidden_keywords else 0
+    constraints_missing = sum(1 for c in must_constraints if normalize_text(c) not in out_lower) if must_constraints else 0
+
+    has_bullets = ("- " in out) or ("•" in out)
+    length_score = 1.0 if len(out) > 200 else (0.6 if len(out) > 80 else 0.3)
+
+    # Accuracy: keyword coverage (demo heuristic)
+    if kw_total > 0:
+        acc = 5.0 * (kw_hits / kw_total)
+    else:
+        acc = 3.0
+
+    # Completeness
+    comp = 2.0 + 2.0 * length_score + (1.0 if has_bullets else 0.0)
+    if kw_total > 0:
+        comp += 1.0 * (kw_hits / kw_total)
+    comp = clamp(comp, 0, 5)
+
+    # Constraint adherence
+    cons = 5.0
+    if forb_hits > 0:
+        cons -= min(3.0, 1.5 * forb_hits)
+    if constraints_missing > 0:
+        cons -= min(3.0, 1.0 * constraints_missing)
+    cons = clamp(cons, 0, 5)
+
+    # Clarity
+    clarity = 3.0
+    if has_bullets:
+        clarity += 1.0
+    if "\n\n" in out:
+        clarity += 0.5
+    if len(out) < 60:
+        clarity -= 1.5
+    clarity = clamp(clarity, 0, 5)
+
+    notes = {
+        "accuracy": f"Keyword hits: {kw_hits}/{kw_total}" if kw_total else "Open-ended task; neutral baseline.",
+        "completeness": f"Length: {len(out)} chars; bullets: {has_bullets}; keyword hits: {kw_hits}/{kw_total}",
+        "constraint_adherence": f"Forbidden hits: {forb_hits}; constraints missing: {constraints_missing}",
+        "clarity": f"Bullets: {has_bullets}; paragraph breaks: {out.count(chr(10)+chr(10))}",
+    }
+
+    return {
+        "judge_name": judge_name,
+        "criterion_scores": {
+            "accuracy": acc,
+            "completeness": comp,
+            "constraint_adherence": cons,
+            "clarity": clarity,
+        },
+        "criterion_notes": notes,
+        "raw": {
+            "keyword_hits": kw_hits,
+            "keyword_total": kw_total,
+            "forbidden_hits": forb_hits,
+            "constraints_missing": constraints_missing,
+        },
+    }
+
+
+# =========================
+# Policy Store + Rule Synthesis
+# =========================
+
