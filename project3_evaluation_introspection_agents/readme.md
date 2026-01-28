@@ -24,3 +24,38 @@ But:
 This project treats **introspection as a control signal**, not commentary.
 
 ---
+
+## Core Objective
+
+> Convert introspection findings into persistent behavior rules and verify impact using evaluation metrics.
+
+This project answers one question:
+> **“What should the agent do differently next time?”**
+
+---
+
+## Project Context: The 3-Layer Improvement Stack
+
+### Project 1 – Evaluation Harness for Agents
+- Defines rubrics and scoring
+- Produces repeatable run logs (JSONL)
+
+Answers:
+> *How good was the agent’s output?*
+
+### Project 2 – Introspection & Root Cause Analysis Agents
+- Diagnoses why scores are low
+- Produces structured introspection reports (JSONL)
+
+Answers:
+> *Why did the agent behave this way?*
+
+### Project 3 – Evaluation & Introspection Agents (This Project)
+- Converts diagnosis into explicit rules
+- Applies rules to agent behavior
+- Measures baseline vs improved deltas
+
+Answers:
+> *What should change next time?*
+
+---
