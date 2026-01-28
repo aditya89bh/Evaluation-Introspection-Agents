@@ -217,6 +217,100 @@ def heuristic_judge(task: Dict[str, Any], output: str, judge_name: str = "heuris
         },
     }
 
+# Rules are simple & explicit so they can be applied deterministically.
+# Each rule has:
+# - rule_id
+# - name
+# - when: conditions
+# - action: what to do in generation
+# - provenance: which failure categories triggered it
+
+def synthesize_rules_from_findings(reports: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Build a policy store from Project 2 reports.
+    Strategy:
+    - Count most common failure categories
+    - Create/enable rules to address those categories
+    """
+    cat_counter = Counter()
+    for r in reports:
+        for f in r.get("findings", []) or []:
+            cat = f.get("category")
+            if cat:
+                cat_counter[cat] += 1
+
+    # Base rule templates
+    rules: List[Dict[str, Any]] = []
+
+    def add_rule(rule_id: str, name: str, provenance: List[str], action: Dict[str, Any]) -> None:
+        rules.append({
+            "rule_id": rule_id,
+            "name": name,
+            "enabled": True,
+            "provenance": provenance,
+            "action": action,
+        })
+
+    # If constraints issues show up, enforce constraint echo + compliance check
+    if cat_counter.get("missing_constraints", 0) > 0:
+        add_rule(
+            "R001",
+            "Constraint First",
+            ["missing_constraints"],
+            {
+                "type": "prepend_constraints_ack",
+                "description": "Echo constraints explicitly before answering and self-check compliance.",
+            },
+        )
+
+    # If underplanning/incompleteness appears, enforce outline-first
+    if cat_counter.get("underplanning", 0) > 0:
+        add_rule(
+            "R002",
+            "Outline Before Answer",
+            ["underplanning"],
+            {
+                "type": "add_outline",
+                "description": "Add a short outline/checklist before the response to increase completeness.",
+            },
+        )
+
+    # If clarity issues, enforce bullets + headings
+    if cat_counter.get("clarity_structure_issues", 0) > 0:
+        add_rule(
+            "R003",
+            "Structure Output",
+            ["clarity_structure_issues"],
+            {
+                "type": "force_structure",
+                "description": "Use headings and bullets; avoid dense paragraphs.",
+            },
+        )
+
+    # If unsupported claims / weak accuracy, add uncertainty & clarifying question
+    if cat_counter.get("unsupported_claims", 0) > 0 or cat_counter.get("overconfidence_low_uncertainty", 0) > 0:
+        add_rule(
+            "R004",
+            "Uncertainty Signaling",
+            ["unsupported_claims", "overconfidence_low_uncertainty"],
+            {
+                "type": "add_uncertainty_line",
+                "description": "If uncertain, state assumptions and ask for missing info instead of inventing details.",
+            },
+        )
+
+    policy_store = {
+        "policy_version": f"p3-{uuid.uuid4().hex[:8]}",
+        "created_at": now_iso(),
+        "category_counts": dict(cat_counter),
+        "rules": rules,
+    }
+    return policy_store
+
+
+# =========================
+# Policy-Guided Agent Wrapper
+# =========================
 
 # =========================
 # Policy Store + Rule Synthesis
