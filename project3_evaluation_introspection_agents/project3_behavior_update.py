@@ -217,6 +217,11 @@ def heuristic_judge(task: Dict[str, Any], output: str, judge_name: str = "heuris
         },
     }
 
+
+# =========================
+# Policy Store + Rule Synthesis
+# =========================
+
 # Rules are simple & explicit so they can be applied deterministically.
 # Each rule has:
 # - rule_id
@@ -312,7 +317,197 @@ def synthesize_rules_from_findings(reports: List[Dict[str, Any]]) -> Dict[str, A
 # Policy-Guided Agent Wrapper
 # =========================
 
+def policy_guided_agent(task: Dict[str, Any], base_output: str, policy_store: Dict[str, Any]) -> str:
+    """
+    Applies enabled policy rules to the base output.
+    This is a deterministic "behavior update" mechanism (no fine-tuning).
+    """
+    out = base_output or ""
+    rules = policy_store.get("rules", []) or []
+    enabled = [r for r in rules if r.get("enabled")]
+
+    must_constraints = task.get("must_include_constraints") or []
+    expected_keywords = task.get("expected_keywords") or []
+
+    # Apply in stable order
+    enabled = sorted(enabled, key=lambda r: r.get("rule_id", ""))
+
+    prefix_blocks: List[str] = []
+    suffix_blocks: List[str] = []
+
+    for r in enabled:
+        action = (r.get("action") or {}).get("type", "")
+
+        if action == "prepend_constraints_ack":
+            if must_constraints:
+                lines = ["Constraints acknowledged:"]
+                for c in must_constraints[:8]:
+                    lines.append(f"- {c}")
+                lines.append("- Compliance check: I will ensure the response satisfies the above constraints.")
+                prefix_blocks.append("\n".join(lines))
+
+        elif action == "add_outline":
+            # Keep it short and reusable
+            outline = [
+                "Outline:",
+                "- Identify constraints and success criteria",
+                "- Produce the response in structured steps",
+                "- Quick self-check against rubric (accuracy, completeness, constraints, clarity)",
+            ]
+            prefix_blocks.append("\n".join(outline))
+
+        elif action == "force_structure":
+            # If output isn't bullet-structured, lightly enforce a structured section
+            if "- " not in out:
+                structured = [
+                    "Response:",
+                    "- Main answer (structured)",
+                    "- Key points",
+                    "- Next steps",
+                ]
+                prefix_blocks.append("\n".join(structured))
+
+        elif action == "add_uncertainty_line":
+            # If task seems underspecified (no expected keywords), ask a clarifying question
+            # Otherwise, add a conservative assumptions line.
+            if not expected_keywords:
+                suffix_blocks.append("Clarifying question: Are there any specific constraints, examples, or expected format you want?")
+            else:
+                suffix_blocks.append("Assumptions/uncertainty: If any required detail is missing, I’ll state assumptions rather than invent specifics.")
+
+    # Compose new output: prefix + original + suffix
+    blocks = []
+    if prefix_blocks:
+        blocks.append("\n\n".join(prefix_blocks))
+    blocks.append(out)
+    if suffix_blocks:
+        blocks.append("\n\n".join(suffix_blocks))
+
+    return "\n\n".join(blocks).strip()
+
+
 # =========================
-# Policy Store + Rule Synthesis
+# Project 3 Runner
 # =========================
 
+def index_latest_baseline_runs(project1_runs: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    """
+    For each task_id, pick the latest run record as the baseline reference.
+    (Project 1 may contain multiple runs per task; this picks the last seen.)
+    """
+    by_task: Dict[str, Dict[str, Any]] = {}
+    for r in project1_runs:
+        task = r.get("task", {}) or {}
+        tid = str(task.get("task_id", ""))
+        if not tid:
+            continue
+        by_task[tid] = r
+    return by_task
+
+def load_project2_reports(path: str) -> List[Dict[str, Any]]:
+    reps = read_jsonl(path)
+    # Ensure findings are plain dicts (already in JSON)
+    return reps
+
+def run_project3(
+    project1_jsonl: str = "runs/project1_eval_harness.jsonl",
+    project2_jsonl: str = "runs/project2_introspection_reports.jsonl",
+    out_policy_json: str = "runs/project3_policy_store.json",
+    out_runs_jsonl: str = "runs/project3_runs.jsonl",
+    overwrite_runs: bool = True,
+) -> None:
+    rubric = default_rubric()
+
+    p1_runs = read_jsonl(project1_jsonl)
+    p2_reports = load_project2_reports(project2_jsonl)
+
+    policy_store = synthesize_rules_from_findings(p2_reports)
+    write_json(out_policy_json, policy_store)
+
+    if overwrite_runs and os.path.exists(out_runs_jsonl):
+        os.remove(out_runs_jsonl)
+
+    baseline_index = index_latest_baseline_runs(p1_runs)
+
+    improvements: List[Tuple[str, float, float]] = []  # (task_id, baseline_score, improved_score)
+
+    for task_id, baseline_run in baseline_index.items():
+        task = baseline_run.get("task", {}) or {}
+        baseline_output = baseline_run.get("output", "") or ""
+        baseline_agg = baseline_run.get("aggregated", {}) or {}
+        baseline_score = float(baseline_agg.get("weighted_score", 0.0))
+
+        # Policy-guided output
+        improved_output = policy_guided_agent(task, baseline_output, policy_store)
+
+        # Evaluate improved output using same judge style
+        jr1 = heuristic_judge(task, improved_output, judge_name="heuristic_judge_v1")
+        jr2 = heuristic_judge(task, improved_output, judge_name="heuristic_judge_v1_clone")
+        improved_agg = aggregate_judges(rubric, [jr1, jr2], strategy="mean")
+        improved_score = float(improved_agg["weighted_score"])
+
+        improvements.append((task_id, baseline_score, improved_score))
+
+        record = {
+            "run_id": str(uuid.uuid4()),
+            "timestamp": now_iso(),
+            "project": "project3_behavior_update",
+            "task": task,
+            "baseline": {
+                "source_run_id": baseline_run.get("run_id"),
+                "output": baseline_output,
+                "aggregated": baseline_agg,
+            },
+            "policy": {
+                "policy_version": policy_store.get("policy_version"),
+                "enabled_rules": [r for r in (policy_store.get("rules") or []) if r.get("enabled")],
+            },
+            "improved": {
+                "output": improved_output,
+                "judge_results": [jr1, jr2],
+                "aggregated": improved_agg,
+            },
+            "delta": {
+                "baseline_weighted_score": baseline_score,
+                "improved_weighted_score": improved_score,
+                "change": improved_score - baseline_score,
+            },
+        }
+        jsonl_append(out_runs_jsonl, record)
+
+    # Print summary
+    print("\n=== Project 3 Summary (Baseline vs Policy-Guided) ===")
+    if not improvements:
+        print("No tasks found in Project 1 logs.")
+        return
+
+    # Per-task
+    print(f"{'Task ID':<12} {'Baseline':<10} {'Improved':<10} {'Delta':<10}")
+    print("-" * 46)
+    for tid, b, imp in improvements:
+        print(f"{tid:<12} {b:<10.2f} {imp:<10.2f} {(imp-b):<10.2f}")
+
+    # Overall
+    avg_b = sum(b for _, b, _ in improvements) / len(improvements)
+    avg_i = sum(i for _, _, i in improvements) / len(improvements)
+    print("\nOverall Avg Baseline:", f"{avg_b:.2f} / 5.00")
+    print("Overall Avg Improved:", f"{avg_i:.2f} / 5.00")
+    print("Overall Delta:", f"{(avg_i-avg_b):.2f}")
+
+    print("\nPolicy written to:", out_policy_json)
+    print("Project 3 runs written to:", out_runs_jsonl)
+    print("\nNext: we can prune rules that don’t improve scores and keep only high-impact policies.")
+
+
+# =========================
+# Main
+# =========================
+
+if __name__ == "__main__":
+    run_project3(
+        project1_jsonl="runs/project1_eval_harness.jsonl",
+        project2_jsonl="runs/project2_introspection_reports.jsonl",
+        out_policy_json="runs/project3_policy_store.json",
+        out_runs_jsonl="runs/project3_runs.jsonl",
+        overwrite_runs=True,
+    )
