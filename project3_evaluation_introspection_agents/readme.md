@@ -103,3 +103,59 @@ The policy store captures:
   Baseline vs policy-guided runs with evaluation deltas.
 
 ---
+
+## Metrics Tracked
+
+- Baseline weighted score vs improved weighted score (0–5)
+- Per-task deltas
+- Average improvement across tasks
+- Rule provenance and activation
+
+---
+
+## What This Project Demonstrates
+
+- Behavior change driven by introspection (not manual prompt tweaking)
+- Measurable improvement using explicit rubrics
+- Learning without fine-tuning
+- An extensible foundation for long-horizon autonomous agents
+
+---
+
+## Run Instructions
+
+1. Run Project 1 to generate baseline logs:
+   - `runs/project1_eval_harness.jsonl`
+
+2. Run Project 2 to generate introspection reports:
+   - `runs/project2_introspection_reports.jsonl`
+
+3. Run Project 3:
+   - Creates `runs/project3_policy_store.json`
+   - Creates `runs/project3_runs.jsonl`
+   - Prints baseline vs improved deltas
+
+---
+
+## Limitations (Current Prototype)
+
+In this version, Project 3:
+- uses baseline outputs from Project 1
+- applies behavior rules as a deterministic transformation layer
+- re-evaluates the transformed output
+
+Next upgrades:
+- apply policies *before* generation
+- re-run a fresh agent each time under policy guidance
+- use outcome-based feedback loops (not only rubric/judge)
+
+---
+
+## Key Insight
+
+> Intelligence is not “being correct once.”  
+> Intelligence is **not repeating the same mistake twice**.
+
+This project operationalizes that idea by turning diagnosis into behavioral control.
+
+---
