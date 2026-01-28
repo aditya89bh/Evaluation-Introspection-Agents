@@ -59,3 +59,47 @@ Answers:
 > *What should change next time?*
 
 ---
+
+## How It Works
+
+Project 3 executes a closed loop:
+
+1. **Load Project 1 run logs** (baseline outputs + evaluation)
+2. **Load Project 2 introspection reports** (failure categories + evidence)
+3. **Synthesize behavior rules** into a versioned policy store
+4. **Apply policies** to generate a policy-guided output
+5. **Re-evaluate** using the same rubric/judge style
+6. **Compare baseline vs improved scores**
+
+---
+
+## Policy Store
+
+Policies are explicit, versioned rules designed to be deterministic and reusable:
+
+- Constraint-first behavior (acknowledge + compliance check)
+- Outline-first planning (structure before writing)
+- Output structuring (headings + bullets)
+- Uncertainty signaling (avoid unsupported claims)
+
+The policy store captures:
+- enabled rules
+- provenance (which failure categories triggered them)
+- category frequency counts (what keeps going wrong)
+
+---
+
+## Inputs and Outputs
+
+### Inputs
+- `runs/project1_eval_harness.jsonl`
+- `runs/project2_introspection_reports.jsonl`
+
+### Outputs
+- `runs/project3_policy_store.json`  
+  Versioned behavior rules synthesized from introspection findings.
+
+- `runs/project3_runs.jsonl`  
+  Baseline vs policy-guided runs with evaluation deltas.
+
+---
