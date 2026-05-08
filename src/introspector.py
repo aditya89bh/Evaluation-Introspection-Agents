@@ -36,26 +36,15 @@ def introspect(evaluation: EvaluationResult) -> IntrospectionResult:
 
     reason = evaluation.failure_reason or "Unknown failure"
 
-    if "Expected" in reason:
-        root_cause = (
-            "The agent prioritized content completeness before checking output constraints."
-        )
-        rule = (
-            "Before finalizing an answer, verify bullet count, structure, and formatting constraints."
-        )
-        trigger = "tasks with explicit formatting requirements"
-    elif "Found jargon" in reason:
-        root_cause = (
-            "The agent optimized for technical precision instead of audience readability."
-        )
-        rule = (
-            "Replace technical jargon with simpler language when readability is requested."
-        )
-        trigger = "tasks requesting simplified communication"
-    else:
-        root_cause = "The system could not classify the failure pattern precisely."
-        rule = "Perform explicit verification before final output generation."
-        trigger = "general task execution"
+    root_cause = (
+        "The agent focused on content generation before verifying task constraints."
+    )
+
+    rule = (
+        "Check bullet count and readability before finalizing the answer."
+    )
+
+    trigger = "tasks with explicit formatting or readability instructions"
 
     return IntrospectionResult(
         failure_summary=reason,
