@@ -48,6 +48,9 @@ def run_loop(memory_path: Path | None = None) -> Dict[str, object]:
     """Run the full evaluation-introspection loop once."""
     memory = RuleMemory(path=memory_path) if memory_path else RuleMemory()
 
+    # Reset demo memory so every run starts from failure.
+    memory.reset()
+
     initial_rules = memory.get_rules()
     run_1_output = generate_attempt(initial_rules)
     run_1_eval = evaluate_output(run_1_output)
