@@ -57,6 +57,23 @@ Run tests:
 pytest
 ```
 
+## Demo output
+
+The demo shows a simple before-and-after improvement loop.
+
+| Stage | What happens | Score |
+|---|---|---:|
+| Run 1 | Agent gives 6 bullets and uses technical jargon | 0.40 |
+| Introspection | System identifies the failure and generates a behavior rule | - |
+| Memory | Rule is stored for future attempts | - |
+| Run 2 | Agent retrieves the rule and produces a cleaner 5-bullet answer | 1.00 |
+
+Example learned rule:
+
+```text
+Check bullet count and readability before finalizing the answer.
+```
+
 ## Expected demo behavior
 
 The demo shows a two-run improvement loop.
