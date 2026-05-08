@@ -1,0 +1,15 @@
+Task Input
+   ↓
+Agent Attempt
+   ↓
+Evaluator
+   ↓
+Introspector
+   ↓
+Behavior Rule Generator
+   ↓
+Persistent Rule Memory
+   ↓
+Retrieved Behavioral Rules
+   ↓
+Improved Future Attempt
