@@ -40,6 +40,33 @@ Persistent Rule Memory
 Next Attempt with Retrieved Rules
 ```
 
+## Quickstart
+
+```bash
+git clone https://github.com/aditya89bh/Evaluation-Introspection-Agents.git
+cd Evaluation-Introspection-Agents
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python examples/run_demo.py
+```
+
+Run tests:
+
+```bash
+pytest
+```
+
+## Expected demo behavior
+
+The demo shows a two-run improvement loop.
+
+| Run | Behavior | Result |
+|---:|---|---|
+| 1 | Agent violates bullet-count and readability constraints | Evaluator detects failure |
+| Memory | Introspector generates a behavior rule | Rule is stored in JSON memory |
+| 2 | Agent retrieves the rule and changes behavior | Score improves |
+
 ## Why this matters
 
 Evaluation and introspection are key primitives for more reliable AI systems. They help agents move from one-shot output generation toward adaptive behavior across time.
@@ -53,14 +80,6 @@ This is useful for:
 - Robotics task agents
 - Self-improving systems
 - Failure recovery loops
-
-## Example improvement loop
-
-| Run | Score | Failure Pattern | Rule Created | Next Behavior |
-|---:|---:|---|---|---|
-| 1 | 40% | Agent ignored constraints | Check constraints before generating final answer | Adds constraint-checking step |
-| 2 | 75% | Agent answered without explaining assumptions | State assumptions before solution | Produces clearer reasoning |
-| 3 | 90% | Task completed successfully | No new rule needed | Stable behavior |
 
 ## Key concepts
 
@@ -77,14 +96,43 @@ This is useful for:
 ```text
 .
 ├── README.md
+├── requirements.txt
+├── data/
+│   └── rules.json
 ├── docs/
 │   ├── architecture.md
+│   ├── architecture_diagram.txt
 │   ├── evaluation_loop.md
 │   ├── introspection_schema.md
-│   └── roadmap.md
-└── examples/
-    └── sample_run_log.md
+│   ├── next_steps.md
+│   ├── roadmap.md
+│   └── run_guide.md
+├── examples/
+│   ├── run_demo.py
+│   └── sample_run_log.md
+├── src/
+│   ├── agent_loop.py
+│   ├── evaluator.py
+│   ├── introspector.py
+│   └── rule_memory.py
+└── tests/
+    └── test_evaluation_loop.py
 ```
+
+## Current status
+
+This repo is a completed MVP research/demo repo.
+
+It includes:
+
+- deterministic evaluator
+- introspection module
+- JSON-backed behavioral memory
+- runnable two-pass demo
+- basic tests
+- architecture and roadmap documentation
+
+It is not yet a production-grade adaptive-agent framework.
 
 ## Positioning
 
@@ -92,16 +140,12 @@ This project is part of a broader exploration of memory-enabled agents.
 
 Memory agents remember context. Evaluation-introspection agents learn from outcomes. Together, they create systems that do not just recall information, but also improve behavior over time.
 
-## Current status
+## Future directions
 
-This repo is in early foundation stage. The main objective is to make the architecture, demo loop, and research framing clear before expanding into richer implementations.
-
-## Next steps
-
-- Add runnable Python demo
-- Add rule memory store
-- Add evaluation schema
-- Add introspection schema
-- Add tests for rule extraction and retrieval
-- Add multiple example task domains
-- Connect this loop to memory-agent and robotics workflows
+- rule confidence and decay
+- rule deduplication
+- richer evaluation dimensions
+- LLM-powered introspection
+- multi-agent critique loops
+- robotics failure-recovery integration
+- visual demo or UI layer
