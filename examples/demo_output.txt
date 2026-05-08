@@ -1,0 +1,73 @@
+========================================================================
+Evaluation Introspection Agent Demo
+========================================================================
+
+This demo shows an agent failing once, introspecting, storing a rule,
+and improving on the next attempt.
+
+========================================================================
+Task
+========================================================================
+
+Summarize the report in exactly 5 bullet points.
+Avoid technical jargon.
+
+========================================================================
+Run 1: Initial Attempt
+========================================================================
+
+1. The architecture introduces an introspection pipeline.
+2. The evaluator computes constraint adherence.
+3. The retrieval mechanism uses behavioral embeddings.
+4. The rule generation stage modifies future planning.
+5. The memory system stores episodic critique.
+6. The planner updates retry strategies.
+
+Run 1 score: 0.40
+Passed: False
+Failure reason: Expected 5 bullets, found 6; Found jargon: architecture, behavioral embeddings, episodic critique
+
+========================================================================
+Introspection
+========================================================================
+
+Failure summary:
+The agent violated output constraints and readability requirements.
+
+Root cause:
+The agent prioritized technical completeness before checking formatting and readability constraints.
+
+Behavior rule:
+Before finalizing an answer, verify bullet count, structure, and readability requirements.
+
+Future trigger:
+Tasks with explicit formatting or readability instructions.
+
+========================================================================
+Behavioral Memory
+========================================================================
+
+Rule 1:
+Before finalizing an answer, verify bullet count, structure, and readability requirements.
+
+Trigger:
+Tasks with explicit formatting or readability instructions.
+
+========================================================================
+Run 2: Improved Attempt
+========================================================================
+
+1. The system helps AI agents review their own mistakes.
+2. It checks whether the answer followed instructions.
+3. The agent explains why failures happened.
+4. Lessons are stored for future tasks.
+5. Future attempts improve using feedback.
+
+Run 2 score: 0.91
+Passed: True
+
+========================================================================
+Result
+========================================================================
+
+The second attempt improves because the system converted the first failure into a reusable behavior rule.
