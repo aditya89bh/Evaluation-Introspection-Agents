@@ -48,11 +48,11 @@ def evaluate_output(output: str, required_bullets: int = 5, avoid_jargon: bool =
 
     if not bullet_count_ok:
         score -= 0.35
-        failure_reasons.append(f"Expected {required_bullets} bullets, found {len(bullet_lines)}")
+        failure_reasons.append(f"Expected {required_bullets} bullets, got {len(bullet_lines)}")
 
     if not jargon_ok:
         score -= 0.25
-        failure_reasons.append(f"Found jargon: {', '.join(jargon_found)}")
+        failure_reasons.append("Used technical jargon")
 
     score = max(score, 0.0)
     passed = score >= 0.8
