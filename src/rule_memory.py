@@ -26,8 +26,15 @@ class RuleMemory:
         with open(self.path, "w", encoding="utf-8") as file:
             json.dump(rules, file, indent=2)
 
+    def reset(self) -> None:
+        """Clear all stored rules."""
+        self._write([])
+
     def add_rule(self, rule: str, trigger: str) -> None:
         rules = self._read()
+
+        if any(existing["rule"] == rule for existing in rules):
+            return
 
         rules.append(
             {
