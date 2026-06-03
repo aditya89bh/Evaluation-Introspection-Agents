@@ -16,7 +16,7 @@ dependencies = []
 evaluation-agents = "evaluation_introspection_agents.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "pytest-cov>=5.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -24,3 +24,20 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["evaluation_introspection_agents"]
+branch = true
+omit = ["*/__init__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == .__main__.:",
+  "raise SystemExit",
+]
+
+[tool.coverage.xml]
+output = "coverage.xml"

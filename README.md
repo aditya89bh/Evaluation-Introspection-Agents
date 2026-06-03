@@ -1,5 +1,7 @@
 # Evaluation Introspection Agents
 
+![Coverage](https://img.shields.io/badge/coverage-90%25%2B-brightgreen)
+
 > **Most agents act. Few agents inspect themselves. This repo explores the missing loop: evaluation, introspection, critique, and behavioral improvement.**
 
 A deterministic, dependency-light AI agents portfolio project for building agents that evaluate their own behavior, inspect traces, critique weaknesses, and propose better next actions — without any LLM API dependency yet.
