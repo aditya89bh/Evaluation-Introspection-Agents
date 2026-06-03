@@ -1,0 +1,46 @@
+$ evaluation-agents run examples/robotics_decision.json --json
+{
+  "critiques": [
+    "Missing expected terms: precondition, operator, fallback.",
+    "Missing constraints: precondition, operator, fallback.",
+    "Vague statements detected: things.",
+    "Failure mode: low objective coverage may cause task failure."
+  ],
+  "evaluation": {
+    "matched_terms": [],
+    "missing_terms": [
+      "precondition",
+      "operator",
+      "fallback"
+    ],
+    "rationale": "Matched 0 of 3 expected objective terms.",
+    "score": 0.0
+  },
+  "improved_output": "Move the arm if things look okay.\nImproved next draft: Add coverage for: precondition, operator, fallback. Replace vague wording with specific actions, owners, and checks.",
+  "improvement": "Include the missing objective terms (precondition, operator, fallback) and remove irrelevant detail.",
+  "improvement_explanation": [
+    "Added missing objective coverage.",
+    "Replaced vague language with concrete guidance."
+  ],
+  "introspection": {
+    "debug_notes": [
+      "sense: Preconditions were not stated.",
+      "decide: Operator approval and fallback were omitted."
+    ],
+    "details": [
+      "sense: Reviewed the workcell state.",
+      "decide: Selected the next robot action."
+    ],
+    "reasoning_trace": "Behavior trace:\n1. sense: Reviewed the workcell state. Observation: Preconditions were not stated.\n2. decide: Selected the next robot action. Observation: Operator approval and fallback were omitted.",
+    "summary": "The trace shows 2 recorded steps: sense, decide."
+  },
+  "output": "Move the arm if things look okay.",
+  "task": {
+    "expected_terms": [
+      "precondition",
+      "operator",
+      "fallback"
+    ],
+    "objective": "Choose a robotics action with precondition, operator approval, and fallback."
+  }
+}

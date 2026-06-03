@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="348" viewBox="0 0 980 348">
+<rect width="980" height="348" rx="14" fill="#0d1117"/>
+<circle cx="24" cy="22" r="6" fill="#ff5f56"/><circle cx="44" cy="22" r="6" fill="#ffbd2e"/><circle cx="64" cy="22" r="6" fill="#27c93f"/>
+<text x="24" y="58" fill="#c9d1d9" font-family="monospace" font-size="15">
+<tspan x="24" dy="0">$ evaluation-agents run examples/planning_task.json</tspan>
+<tspan x="24" dy="22">Task: Create a project plan with owner, timeline, and rollback.</tspan>
+<tspan x="24" dy="22">Score: 0.00</tspan>
+<tspan x="24" dy="22">Evaluation: Matched 0 of 3 expected objective terms.</tspan>
+<tspan x="24" dy="22">Introspection: The trace shows 2 recorded steps: parse, draft.</tspan>
+<tspan x="24" dy="22">Critique:</tspan>
+<tspan x="24" dy="22">- Missing expected terms: owner, timeline, rollback.</tspan>
+<tspan x="24" dy="22">- Missing constraints: owner, timeline, rollback.</tspan>
+<tspan x="24" dy="22">- Vague statements detected: some, things, maybe.</tspan>
+<tspan x="24" dy="22">- Failure mode: low objective coverage may cause task failure.</tspan>
+<tspan x="24" dy="22">Improvement: Include the missing objective terms (owner, timeline, rollback) and remove irrelevant detail.</tspan>
+<tspan x="24" dy="22">Improved output:</tspan>
+<tspan x="24" dy="22">Maybe start soon and do some planning things.</tspan>
+<tspan x="24" dy="22">Improved next draft: Add coverage for: owner, timeline, rollback. Replace vague wording with specific actions, owners, and checks.</tspan>
+</text></svg>

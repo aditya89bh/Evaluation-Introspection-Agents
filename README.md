@@ -105,6 +105,15 @@ Critique:
 Improvement: Include the missing objective terms (owner, timeline, rollback) and remove irrelevant detail.
 ```
 
+
+## CLI demo assets
+
+- [Readable CLI output](assets/demo/cli_readable_output.txt)
+- [JSON CLI output](assets/demo/cli_json_output.txt)
+- [Terminal-style screenshot](assets/demo/cli_terminal_screenshot.svg)
+
+![CLI demo terminal screenshot](assets/demo/cli_terminal_screenshot.svg)
+
 ## Benchmark
 
 ```bash

@@ -1,0 +1,14 @@
+$ evaluation-agents run examples/planning_task.json
+Task: Create a project plan with owner, timeline, and rollback.
+Score: 0.00
+Evaluation: Matched 0 of 3 expected objective terms.
+Introspection: The trace shows 2 recorded steps: parse, draft.
+Critique:
+- Missing expected terms: owner, timeline, rollback.
+- Missing constraints: owner, timeline, rollback.
+- Vague statements detected: some, things, maybe.
+- Failure mode: low objective coverage may cause task failure.
+Improvement: Include the missing objective terms (owner, timeline, rollback) and remove irrelevant detail.
+Improved output:
+Maybe start soon and do some planning things.
+Improved next draft: Add coverage for: owner, timeline, rollback. Replace vague wording with specific actions, owners, and checks.
