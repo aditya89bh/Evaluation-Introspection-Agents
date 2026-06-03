@@ -47,3 +47,16 @@ def test_critic_accepts_specific_complete_output() -> None:
     )
 
     assert critiques == ("No major deterministic weaknesses were detected.",)
+
+
+def test_critic_structured_findings_include_scores() -> None:
+    """Structured critique results should include confidence, severity, and importance."""
+    evaluation = EvaluationResult(0.0, (), ("rollback",), "Missing rollback.")
+    introspection = IntrospectionResult("Trace", ("draft: x",), "trace", ())
+
+    result = CriticAgent().analyze(evaluation, introspection, output="Maybe risk.", constraints=("rollback",))
+
+    assert result.findings
+    assert all(0.0 <= finding.confidence <= 1.0 for finding in result.findings)
+    assert {finding.severity for finding in result.findings} <= {"info", "medium", "high"}
+    assert result.to_dict()["findings"][0]["importance"] in {"low", "medium", "high"}

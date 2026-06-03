@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from evaluation_introspection_agents.core.results import CritiqueResult, EvaluationResult, IntrospectionResult
+from evaluation_introspection_agents.core.results import CritiqueFinding, CritiqueResult, EvaluationResult, IntrospectionResult
 
 
 class CriticAgent:
@@ -43,13 +43,36 @@ class CriticAgent:
         elif evaluation.score < 0.8:
             failure_modes.append("Failure mode: partial coverage may satisfy only part of the task.")
 
-        return CritiqueResult(
+        result = CritiqueResult(
             weaknesses=tuple(weaknesses),
             vague_statements=vague_found,
             missing_constraints=missing_constraints,
             risks=risk_found,
             failure_modes=tuple(failure_modes),
         )
+        return CritiqueResult(
+            weaknesses=result.weaknesses,
+            vague_statements=result.vague_statements,
+            missing_constraints=result.missing_constraints,
+            risks=result.risks,
+            failure_modes=result.failure_modes,
+            findings=self.score_findings(result.all_findings()),
+        )
+
+    def score_findings(self, findings: tuple[str, ...]) -> tuple[CritiqueFinding, ...]:
+        """Assign deterministic confidence, severity, and importance to critiques."""
+        scored: list[CritiqueFinding] = []
+        for finding in findings:
+            lowered = finding.lower()
+            if "no major" in lowered:
+                scored.append(CritiqueFinding(finding, confidence=0.7, severity="info", importance="low"))
+            elif "risk" in lowered or "failure mode" in lowered:
+                scored.append(CritiqueFinding(finding, confidence=0.9, severity="high", importance="high"))
+            elif "missing" in lowered:
+                scored.append(CritiqueFinding(finding, confidence=0.95, severity="medium", importance="high"))
+            else:
+                scored.append(CritiqueFinding(finding, confidence=0.8, severity="medium", importance="medium"))
+        return tuple(scored)
 
     def critique(
         self,

@@ -39,6 +39,19 @@ class IntrospectionResult:
         data["debug_notes"] = list(self.debug_notes)
         return data
 
+@dataclass(frozen=True)
+class CritiqueFinding:
+    """One structured critique with confidence, severity, and importance."""
+
+    message: str
+    confidence: float
+    severity: str
+    importance: str
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize the critique finding to a JSON-safe dictionary."""
+        return asdict(self)
+
 
 @dataclass(frozen=True)
 class CritiqueResult:
@@ -49,6 +62,7 @@ class CritiqueResult:
     missing_constraints: tuple[str, ...]
     risks: tuple[str, ...]
     failure_modes: tuple[str, ...]
+    findings: tuple[CritiqueFinding, ...] = ()
 
     def all_findings(self) -> tuple[str, ...]:
         """Return all critique findings as readable strings."""
@@ -67,7 +81,14 @@ class CritiqueResult:
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize the critique result to a JSON-safe dictionary."""
-        return {key: list(value) for key, value in asdict(self).items()}
+        return {
+            "weaknesses": list(self.weaknesses),
+            "vague_statements": list(self.vague_statements),
+            "missing_constraints": list(self.missing_constraints),
+            "risks": list(self.risks),
+            "failure_modes": list(self.failure_modes),
+            "findings": [finding.to_dict() for finding in self.findings],
+        }
 
 
 @dataclass(frozen=True)
