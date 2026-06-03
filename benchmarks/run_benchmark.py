@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from collections import defaultdict
 from statistics import mean
 from typing import Any
 
@@ -37,6 +38,18 @@ def run_benchmark(task_dir: Path = DEFAULT_TASK_DIR) -> dict[str, Any]:
     total = len(cases)
     pass_count = sum(1 for case in cases if case["passed"])
     improvement_count = sum(1 for case in cases if case["improved"])
+    category_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for case in cases:
+        category_groups[case["category"]].append(case)
+    category_metrics = {
+        category: {
+            "case_count": len(group),
+            "pass_rate": round(sum(1 for case in group if case["passed"]) / len(group), 2),
+            "average_score": round(mean(case["score"] for case in group), 2),
+            "failure_count": sum(case["failure_count"] for case in group),
+        }
+        for category, group in sorted(category_groups.items())
+    }
     report = {
         "metrics": {
             "case_count": total,
@@ -45,6 +58,7 @@ def run_benchmark(task_dir: Path = DEFAULT_TASK_DIR) -> dict[str, Any]:
             "failure_count": sum(case["failure_count"] for case in cases),
             "improvement_rate": round(improvement_count / total, 2) if total else 0.0,
         },
+        "category_metrics": category_metrics,
         "cases": cases,
     }
     return report

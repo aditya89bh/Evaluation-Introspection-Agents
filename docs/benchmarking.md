@@ -13,3 +13,13 @@ The current assets include:
 - `assets/benchmarks/benchmark_terminal_screenshot.svg`
 
 ![Benchmark terminal screenshot](../assets/benchmarks/benchmark_terminal_screenshot.svg)
+
+## Category metrics
+
+The benchmark report includes per-category metrics:
+
+- category pass rate
+- category average score
+- category failure count
+
+Categories currently include planning, safety, customer support, robotics, and reasoning.

@@ -181,6 +181,38 @@
       "task_file": "benchmarks/scenarios/support_refund.json"
     }
   ],
+  "category_metrics": {
+    "customer_support": {
+      "average_score": 0.0,
+      "case_count": 4,
+      "failure_count": 14,
+      "pass_rate": 0.0
+    },
+    "planning": {
+      "average_score": 0.0,
+      "case_count": 4,
+      "failure_count": 15,
+      "pass_rate": 0.0
+    },
+    "reasoning": {
+      "average_score": 0.08,
+      "case_count": 4,
+      "failure_count": 16,
+      "pass_rate": 0.0
+    },
+    "robotics": {
+      "average_score": 0.0,
+      "case_count": 4,
+      "failure_count": 13,
+      "pass_rate": 0.0
+    },
+    "safety": {
+      "average_score": 0.0,
+      "case_count": 4,
+      "failure_count": 16,
+      "pass_rate": 0.0
+    }
+  },
   "metrics": {
     "average_score": 0.02,
     "case_count": 20,
