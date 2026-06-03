@@ -2,7 +2,7 @@
 
 import json
 
-from benchmarks.run_benchmark import run_benchmark, write_report
+from benchmarks.run_benchmark import markdown_report, run_benchmark, write_markdown_report, write_report
 
 
 def test_benchmark_computes_required_metrics(tmp_path) -> None:
@@ -40,3 +40,19 @@ def test_benchmark_writes_report(tmp_path) -> None:
     write_report(report, report_path)
 
     assert json.loads(report_path.read_text(encoding="utf-8")) == report
+
+
+def test_benchmark_markdown_report_includes_tables(tmp_path) -> None:
+    """Markdown reports should include summary and category tables."""
+    report = {
+        "metrics": {"case_count": 1, "pass_rate": 0.0, "average_score": 0.0, "failure_count": 1, "improvement_rate": 1.0},
+        "category_metrics": {"planning": {"case_count": 1, "pass_rate": 0.0, "average_score": 0.0, "failure_count": 1}},
+        "cases": [{"task_file": "x.json", "score": 0.0}],
+    }
+    text = markdown_report(report)
+    path = tmp_path / "report.md"
+    write_markdown_report(report, path)
+
+    assert "# Benchmark Report" in text
+    assert "| planning | 1 | 0.0 | 0.0 | 1 |" in text
+    assert path.read_text(encoding="utf-8") == text

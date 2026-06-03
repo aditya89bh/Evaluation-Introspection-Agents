@@ -70,10 +70,47 @@ def write_report(report: dict[str, Any], path: Path = DEFAULT_REPORT_PATH) -> No
     path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def markdown_report(report: dict[str, Any]) -> str:
+    """Render a benchmark report as Markdown."""
+    metrics = report["metrics"]
+    lines = [
+        "# Benchmark Report",
+        "",
+        "## Summary",
+        "",
+        "| Metric | Value |",
+        "|---|---:|",
+    ]
+    for key in ("case_count", "pass_rate", "average_score", "failure_count", "improvement_rate"):
+        lines.append(f"| {key} | {metrics[key]} |")
+    lines.extend(["", "## Category breakdown", "", "| Category | Cases | Pass rate | Avg score | Failures |", "|---|---:|---:|---:|---:|"])
+    for category, values in report.get("category_metrics", {}).items():
+        lines.append(
+            f"| {category} | {values['case_count']} | {values['pass_rate']} | {values['average_score']} | {values['failure_count']} |"
+        )
+    cases = report["cases"]
+    best = max(cases, key=lambda case: case["score"], default=None)
+    worst = min(cases, key=lambda case: case["score"], default=None)
+    lines.extend(["", "## Best / worst performers", ""])
+    if best:
+        lines.append(f"- Best: `{best['task_file']}` score `{best['score']}`")
+    if worst:
+        lines.append(f"- Worst: `{worst['task_file']}` score `{worst['score']}`")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_markdown_report(report: dict[str, Any], path: Path = Path("results/benchmark_report.md")) -> None:
+    """Write a Markdown benchmark report."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(markdown_report(report), encoding="utf-8")
+
+
 def main() -> int:
     """Run the benchmark and write the default report."""
     report = run_benchmark()
     write_report(report)
+    write_markdown_report(report)
     print(json.dumps(report["metrics"], indent=2, sort_keys=True))
     return 0
 
