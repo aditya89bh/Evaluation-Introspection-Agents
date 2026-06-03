@@ -8,6 +8,15 @@ AI agents are often judged only by their final answer or action. Real improvemen
 
 ## Architecture
 
+```mermaid
+flowchart LR
+    Evaluator[Evaluator] --> Introspector[Introspector]
+    Introspector --> Critic[Critic]
+    Critic --> Improver[Improver]
+    Improver --> Behavior[Updated Behavior]
+```
+
+
 ```text
 Task + Output + Trace
         |
