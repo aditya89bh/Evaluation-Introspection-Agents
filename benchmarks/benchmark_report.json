@@ -1,0 +1,43 @@
+{
+  "cases": [
+    {
+      "failure_count": 3,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.67,
+      "task_file": "examples/customer_support.json"
+    },
+    {
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "examples/planning_task.json"
+    },
+    {
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "examples/robotics_decision.json"
+    },
+    {
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.67,
+      "task_file": "examples/safety_response.json"
+    }
+  ],
+  "metrics": {
+    "average_score": 0.34,
+    "case_count": 4,
+    "failure_count": 15,
+    "improvement_rate": 1.0,
+    "pass_rate": 0.0
+  }
+}
