@@ -51,6 +51,14 @@ def run_benchmark(task_dir: Path = DEFAULT_TASK_DIR) -> dict[str, Any]:
         }
         for category, group in sorted(category_groups.items())
     }
+    leaderboard = {
+        "highest_score": sorted(cases, key=lambda case: (-case["score"], case["task_file"]))[:5],
+        "lowest_score": sorted(cases, key=lambda case: (case["score"], case["task_file"]))[:5],
+        "most_improved": sorted(
+            cases,
+            key=lambda case: (-(case["improved_score"] - case["score"]), case["task_file"]),
+        )[:5],
+    }
     report = {
         "metrics": {
             "case_count": total,
@@ -60,6 +68,7 @@ def run_benchmark(task_dir: Path = DEFAULT_TASK_DIR) -> dict[str, Any]:
             "improvement_rate": round(improvement_count / total, 2) if total else 0.0,
         },
         "category_metrics": category_metrics,
+        "leaderboard": leaderboard,
         "cases": cases,
     }
     return report
@@ -89,14 +98,14 @@ def markdown_report(report: dict[str, Any]) -> str:
         lines.append(
             f"| {category} | {values['case_count']} | {values['pass_rate']} | {values['average_score']} | {values['failure_count']} |"
         )
-    cases = report["cases"]
-    best = max(cases, key=lambda case: case["score"], default=None)
-    worst = min(cases, key=lambda case: case["score"], default=None)
-    lines.extend(["", "## Best / worst performers", ""])
-    if best:
-        lines.append(f"- Best: `{best['task_file']}` score `{best['score']}`")
-    if worst:
-        lines.append(f"- Worst: `{worst['task_file']}` score `{worst['score']}`")
+    lines.extend(["", "## Leaderboard", ""])
+    for title, key in (("Highest score", "highest_score"), ("Lowest score", "lowest_score"), ("Most improved", "most_improved")):
+        lines.append(f"### {title}")
+        lines.append("")
+        for case in report.get("leaderboard", {}).get(key, []):
+            delta = round(case["improved_score"] - case["score"], 2)
+            lines.append(f"- `{case['task_file']}` score `{case['score']}` improved `{case['improved_score']}` delta `{delta}`")
+        lines.append("")
     lines.append("")
     return "\n".join(lines)
 

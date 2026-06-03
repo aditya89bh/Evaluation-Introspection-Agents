@@ -213,6 +213,149 @@
       "pass_rate": 0.0
     }
   },
+  "leaderboard": {
+    "highest_score": [
+      {
+        "category": "reasoning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.33,
+        "task_file": "benchmarks/scenarios/reasoning_math.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 3,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_incident.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_migration.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_release_plan.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_research.json"
+      }
+    ],
+    "lowest_score": [
+      {
+        "category": "planning",
+        "failure_count": 3,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_incident.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_migration.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_release_plan.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_research.json"
+      },
+      {
+        "category": "reasoning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/reasoning_compare.json"
+      }
+    ],
+    "most_improved": [
+      {
+        "category": "planning",
+        "failure_count": 3,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_incident.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_migration.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_release_plan.json"
+      },
+      {
+        "category": "planning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/planning_research.json"
+      },
+      {
+        "category": "reasoning",
+        "failure_count": 4,
+        "improved": true,
+        "improved_score": 1.0,
+        "passed": false,
+        "score": 0.0,
+        "task_file": "benchmarks/scenarios/reasoning_compare.json"
+      }
+    ]
+  },
   "metrics": {
     "average_score": 0.02,
     "case_count": 20,

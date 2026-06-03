@@ -30,6 +30,7 @@ def test_benchmark_computes_required_metrics(tmp_path) -> None:
     assert report["metrics"]["improvement_rate"] == 1.0
     assert report["category_metrics"]["planning"]["case_count"] == 1
     assert report["category_metrics"]["planning"]["pass_rate"] == 0.0
+    assert report["leaderboard"]["most_improved"][0]["task_file"].endswith("task.json")
 
 
 def test_benchmark_writes_report(tmp_path) -> None:
@@ -47,7 +48,8 @@ def test_benchmark_markdown_report_includes_tables(tmp_path) -> None:
     report = {
         "metrics": {"case_count": 1, "pass_rate": 0.0, "average_score": 0.0, "failure_count": 1, "improvement_rate": 1.0},
         "category_metrics": {"planning": {"case_count": 1, "pass_rate": 0.0, "average_score": 0.0, "failure_count": 1}},
-        "cases": [{"task_file": "x.json", "score": 0.0}],
+        "leaderboard": {"highest_score": [{"task_file": "x.json", "score": 0.0, "improved_score": 1.0}], "lowest_score": [], "most_improved": []},
+        "cases": [{"task_file": "x.json", "score": 0.0, "improved_score": 1.0}],
     }
     text = markdown_report(report)
     path = tmp_path / "report.md"
@@ -55,6 +57,7 @@ def test_benchmark_markdown_report_includes_tables(tmp_path) -> None:
 
     assert "# Benchmark Report" in text
     assert "| planning | 1 | 0.0 | 0.0 | 1 |" in text
+    assert "## Leaderboard" in text
     assert path.read_text(encoding="utf-8") == text
 
 

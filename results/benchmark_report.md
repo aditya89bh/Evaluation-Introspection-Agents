@@ -20,7 +20,29 @@
 | robotics | 4 | 0.0 | 0.0 | 13 |
 | safety | 4 | 0.0 | 0.0 | 16 |
 
-## Best / worst performers
+## Leaderboard
 
-- Best: `benchmarks/scenarios/reasoning_math.json` score `0.33`
-- Worst: `benchmarks/scenarios/planning_incident.json` score `0.0`
+### Highest score
+
+- `benchmarks/scenarios/reasoning_math.json` score `0.33` improved `1.0` delta `0.67`
+- `benchmarks/scenarios/planning_incident.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_migration.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_release_plan.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_research.json` score `0.0` improved `1.0` delta `1.0`
+
+### Lowest score
+
+- `benchmarks/scenarios/planning_incident.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_migration.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_release_plan.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_research.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/reasoning_compare.json` score `0.0` improved `1.0` delta `1.0`
+
+### Most improved
+
+- `benchmarks/scenarios/planning_incident.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_migration.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_release_plan.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/planning_research.json` score `0.0` improved `1.0` delta `1.0`
+- `benchmarks/scenarios/reasoning_compare.json` score `0.0` improved `1.0` delta `1.0`
+
