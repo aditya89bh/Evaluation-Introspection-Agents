@@ -12,6 +12,9 @@ license = { text = "MIT" }
 authors = [{ name = "Aditya Bhatia" }]
 dependencies = []
 
+[project.scripts]
+evaluation-agents = "evaluation_introspection_agents.cli:main"
+
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 
