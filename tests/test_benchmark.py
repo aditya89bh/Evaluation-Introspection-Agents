@@ -2,7 +2,7 @@
 
 import json
 
-from benchmarks.run_benchmark import markdown_report, run_benchmark, write_markdown_report, write_report
+from benchmarks.run_benchmark import markdown_report, run_benchmark, write_csv_report, write_markdown_report, write_report
 
 
 def test_benchmark_computes_required_metrics(tmp_path) -> None:
@@ -56,3 +56,19 @@ def test_benchmark_markdown_report_includes_tables(tmp_path) -> None:
     assert "# Benchmark Report" in text
     assert "| planning | 1 | 0.0 | 0.0 | 1 |" in text
     assert path.read_text(encoding="utf-8") == text
+
+
+def test_benchmark_csv_report_writes_case_rows(tmp_path) -> None:
+    """CSV reports should export benchmark case rows."""
+    report = {
+        "cases": [
+            {"task_file": "x.json", "category": "planning", "score": 0.5, "passed": False, "improved_score": 1.0, "improved": True, "failure_count": 2}
+        ]
+    }
+    path = tmp_path / "report.csv"
+
+    write_csv_report(report, path)
+
+    text = path.read_text(encoding="utf-8")
+    assert "task_file,category,score,passed,improved_score,improved,failure_count" in text
+    assert "x.json,planning,0.5,False,1.0,True,2" in text

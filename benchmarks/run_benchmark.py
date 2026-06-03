@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import json
 from pathlib import Path
 from collections import defaultdict
@@ -106,11 +107,23 @@ def write_markdown_report(report: dict[str, Any], path: Path = Path("results/ben
     path.write_text(markdown_report(report), encoding="utf-8")
 
 
+def write_csv_report(report: dict[str, Any], path: Path = Path("results/benchmark_report.csv")) -> None:
+    """Write benchmark cases as a CSV report."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = ["task_file", "category", "score", "passed", "improved_score", "improved", "failure_count"]
+    with path.open("w", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        for case in report["cases"]:
+            writer.writerow({key: case.get(key, "") for key in fieldnames})
+
+
 def main() -> int:
     """Run the benchmark and write the default report."""
     report = run_benchmark()
     write_report(report)
     write_markdown_report(report)
+    write_csv_report(report)
     print(json.dumps(report["metrics"], indent=2, sort_keys=True))
     return 0
 
