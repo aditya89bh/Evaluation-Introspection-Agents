@@ -127,12 +127,21 @@ def write_csv_report(report: dict[str, Any], path: Path = Path("results/benchmar
             writer.writerow({key: case.get(key, "") for key in fieldnames})
 
 
+def write_dashboard(report: dict[str, Any], results_dir: Path = Path("results")) -> None:
+    """Write latest benchmark dashboard files in JSON, Markdown, and CSV formats."""
+    results_dir.mkdir(parents=True, exist_ok=True)
+    write_report(report, results_dir / "latest.json")
+    write_markdown_report(report, results_dir / "latest.md")
+    write_csv_report(report, results_dir / "latest.csv")
+
+
 def main() -> int:
     """Run the benchmark and write the default report."""
     report = run_benchmark()
     write_report(report)
     write_markdown_report(report)
     write_csv_report(report)
+    write_dashboard(report)
     print(json.dumps(report["metrics"], indent=2, sort_keys=True))
     return 0
 

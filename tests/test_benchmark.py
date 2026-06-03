@@ -2,7 +2,7 @@
 
 import json
 
-from benchmarks.run_benchmark import markdown_report, run_benchmark, write_csv_report, write_markdown_report, write_report
+from benchmarks.run_benchmark import markdown_report, run_benchmark, write_csv_report, write_dashboard, write_markdown_report, write_report
 
 
 def test_benchmark_computes_required_metrics(tmp_path) -> None:
@@ -75,3 +75,19 @@ def test_benchmark_csv_report_writes_case_rows(tmp_path) -> None:
     text = path.read_text(encoding="utf-8")
     assert "task_file,category,score,passed,improved_score,improved,failure_count" in text
     assert "x.json,planning,0.5,False,1.0,True,2" in text
+
+
+def test_dashboard_writes_latest_files(tmp_path) -> None:
+    """Dashboard generation should write latest JSON, Markdown, and CSV files."""
+    report = {
+        "metrics": {"case_count": 1, "pass_rate": 0.0, "average_score": 0.0, "failure_count": 1, "improvement_rate": 1.0},
+        "category_metrics": {},
+        "leaderboard": {"highest_score": [], "lowest_score": [], "most_improved": []},
+        "cases": [],
+    }
+
+    write_dashboard(report, tmp_path)
+
+    assert (tmp_path / "latest.json").exists()
+    assert (tmp_path / "latest.md").exists()
+    assert (tmp_path / "latest.csv").exists()

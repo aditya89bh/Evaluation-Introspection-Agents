@@ -23,3 +23,13 @@ The benchmark report includes per-category metrics:
 - category failure count
 
 Categories currently include planning, safety, customer support, robotics, and reasoning.
+
+## Results dashboard
+
+Running `python benchmarks/run_benchmark.py` now refreshes:
+
+- `results/latest.json`
+- `results/latest.md`
+- `results/latest.csv`
+
+These files mirror the latest benchmark run and are intended for quick portfolio review.
