@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from evaluation_introspection_agents.agents.evaluator import EvaluationResult
+from evaluation_introspection_agents.core.results import EvaluationResult, ImprovementResult
 
 
 class ImproverAgent:
@@ -48,3 +48,11 @@ class ImproverAgent:
         if not explanations:
             explanations.append("No change required by deterministic feedback.")
         return tuple(explanations)
+
+    def improve_result(self, output: str, evaluation: EvaluationResult, critiques: tuple[str, ...]) -> ImprovementResult:
+        """Return a structured improvement result."""
+        return ImprovementResult(
+            recommendation=self.improve(evaluation, critiques),
+            improved_output=self.improve_output(output, evaluation, critiques),
+            explanations=self.explain_improvements(evaluation, critiques),
+        )

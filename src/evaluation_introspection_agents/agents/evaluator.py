@@ -1,26 +1,7 @@
 """Deterministic output evaluation agent."""
 
-from dataclasses import asdict, dataclass
-from typing import Any
-
+from evaluation_introspection_agents.core.results import EvaluationResult
 from evaluation_introspection_agents.core.task import Task
-
-
-@dataclass(frozen=True)
-class EvaluationResult:
-    """Result of scoring an output against a task."""
-
-    score: float
-    matched_terms: tuple[str, ...]
-    missing_terms: tuple[str, ...]
-    rationale: str
-
-    def to_dict(self) -> dict[str, Any]:
-        """Serialize the evaluation result to a JSON-safe dictionary."""
-        data = asdict(self)
-        data["matched_terms"] = list(self.matched_terms)
-        data["missing_terms"] = list(self.missing_terms)
-        return data
 
 
 class EvaluatorAgent:
