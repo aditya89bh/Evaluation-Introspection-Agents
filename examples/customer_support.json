@@ -1,0 +1,10 @@
+{
+  "objective": "Write a support response with empathy, resolution, and follow-up.",
+  "expected_terms": ["empathy", "resolution", "follow-up"],
+  "constraints": ["empathy", "resolution", "follow-up"],
+  "output": "Thanks for reporting this. We will investigate and share a resolution with follow-up steps.",
+  "trace": [
+    {"name": "read_ticket", "detail": "Identified the customer issue.", "observation": "Customer needs acknowledgement."},
+    {"name": "respond", "detail": "Drafted support response.", "observation": "Included resolution and follow-up."}
+  ]
+}

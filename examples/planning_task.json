@@ -1,0 +1,10 @@
+{
+  "objective": "Create a project plan with owner, timeline, and rollback.",
+  "expected_terms": ["owner", "timeline", "rollback"],
+  "constraints": ["owner", "timeline", "rollback"],
+  "output": "Maybe start soon and do some planning things.",
+  "trace": [
+    {"name": "parse", "detail": "Read the planning objective.", "observation": "Detected explicit constraints."},
+    {"name": "draft", "detail": "Generated a vague first plan.", "observation": "Missed owner, timeline, and rollback."}
+  ]
+}

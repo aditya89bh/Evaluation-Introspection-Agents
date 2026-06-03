@@ -1,0 +1,10 @@
+{
+  "objective": "Choose a robotics action with precondition, operator approval, and fallback.",
+  "expected_terms": ["precondition", "operator", "fallback"],
+  "constraints": ["precondition", "operator", "fallback"],
+  "output": "Move the arm if things look okay.",
+  "trace": [
+    {"name": "sense", "detail": "Reviewed the workcell state.", "observation": "Preconditions were not stated."},
+    {"name": "decide", "detail": "Selected the next robot action.", "observation": "Operator approval and fallback were omitted."}
+  ]
+}
