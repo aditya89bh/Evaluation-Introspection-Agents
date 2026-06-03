@@ -14,6 +14,24 @@ flowchart LR
     U --> R[FeedbackLoopResult]
 ```
 
+
+## Feedback loop diagram
+
+```mermaid
+flowchart LR
+    Task[Task] --> Output[Candidate Output]
+    Output --> Evaluation[Evaluation
+score + objective coverage]
+    Evaluation --> Introspection[Introspection
+trace + reasoning notes]
+    Introspection --> Critique[Critique
+weaknesses + risks]
+    Critique --> Improvement[Improvement
+recommendation + edits]
+    Improvement --> Updated[Updated Output]
+    Updated -. next attempt .-> Evaluation
+```
+
 ## Data flow
 
 ```mermaid

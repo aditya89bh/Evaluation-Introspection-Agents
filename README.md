@@ -48,6 +48,24 @@ Improver Agent       -> recommendation + improved next draft
 Readable / JSON report
 ```
 
+
+## Feedback loop diagram
+
+```mermaid
+flowchart LR
+    Task[Task] --> Output[Candidate Output]
+    Output --> Evaluation[Evaluation
+score + objective coverage]
+    Evaluation --> Introspection[Introspection
+trace + reasoning notes]
+    Introspection --> Critique[Critique
+weaknesses + risks]
+    Critique --> Improvement[Improvement
+recommendation + edits]
+    Improvement --> Updated[Updated Output]
+    Updated -. next attempt .-> Evaluation
+```
+
 ## Core concepts
 
 1. **Evaluator Agent**: scores an output against a task objective.
