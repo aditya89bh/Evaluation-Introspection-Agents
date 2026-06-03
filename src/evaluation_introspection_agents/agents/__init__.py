@@ -4,12 +4,18 @@ from evaluation_introspection_agents.agents.critic import CriticAgent
 from evaluation_introspection_agents.agents.evaluator import EvaluationResult, EvaluatorAgent
 from evaluation_introspection_agents.agents.improver import ImproverAgent
 from evaluation_introspection_agents.agents.introspector import IntrospectionResult, IntrospectorAgent
+from evaluation_introspection_agents.agents.multi_critic import CriticA, CriticB, CriticC, MultiCriticEvaluator, MultiCriticResult
 
 __all__ = [
     "CriticAgent",
     "EvaluationResult",
     "EvaluatorAgent",
+    "CriticA",
+    "CriticB",
+    "CriticC",
     "ImproverAgent",
+    "MultiCriticEvaluator",
+    "MultiCriticResult",
     "IntrospectionResult",
     "IntrospectorAgent",
 ]
