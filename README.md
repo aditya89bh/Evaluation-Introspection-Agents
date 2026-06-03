@@ -138,6 +138,8 @@ Improvement: Include the missing objective terms (owner, timeline, rollback) and
 python benchmarks/run_benchmark.py
 ```
 
+![Benchmark terminal screenshot](assets/benchmarks/benchmark_terminal_screenshot.svg)
+
 Current deterministic benchmark summary:
 
 ```json

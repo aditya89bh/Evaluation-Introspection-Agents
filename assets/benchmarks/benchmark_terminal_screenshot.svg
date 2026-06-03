@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="218" viewBox="0 0 760 218">
+<rect width="760" height="218" rx="14" fill="#111827"/>
+<text x="24" y="34" fill="#e5e7eb" font-family="monospace" font-size="15">
+<tspan x="24" dy="0" fill="#93c5fd">$ python benchmarks/run_benchmark.py</tspan>
+<tspan x="24" dy="22" fill="#e5e7eb">{</tspan>
+<tspan x="24" dy="22" fill="#e5e7eb">  "average_score": 0.34,</tspan>
+<tspan x="24" dy="22" fill="#e5e7eb">  "case_count": 4,</tspan>
+<tspan x="24" dy="22" fill="#e5e7eb">  "failure_count": 15,</tspan>
+<tspan x="24" dy="22" fill="#e5e7eb">  "improvement_rate": 1.0,</tspan>
+<tspan x="24" dy="22" fill="#e5e7eb">  "pass_rate": 0.0</tspan>
+<tspan x="24" dy="22" fill="#e5e7eb">}</tspan>
+</text></svg>
