@@ -53,6 +53,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     run_parser = subparsers.add_parser("run", help="Run the evaluation pipeline for a task file.")
     run_parser.add_argument("task_file", type=Path, help="Path to a JSON task file.")
+    run_parser.add_argument("--json", action="store_true", dest="json_output", help="Emit machine-readable JSON output.")
     return parser
 
 
@@ -63,7 +64,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "run":
         task, output, trace, constraints = load_task_file(args.task_file)
         result = FeedbackLoop().run(task, output, trace, constraints)
-        print(format_readable(result))
+        if args.json_output:
+            print(json.dumps(result.to_dict(), indent=2, sort_keys=True))
+        else:
+            print(format_readable(result))
         return 0
     parser.error("Unknown command")
     return 2

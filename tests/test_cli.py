@@ -43,3 +43,28 @@ def test_load_task_file_defaults_constraints_to_expected_terms(tmp_path) -> None
     assert output == ""
     assert trace.steps == ()
     assert constraints == ("x",)
+
+
+def test_cli_json_output_is_machine_readable(tmp_path, capsys) -> None:
+    """The CLI should emit a stable JSON schema with --json."""
+    task_file = tmp_path / "task.json"
+    task_file.write_text(
+        json.dumps(
+            {
+                "objective": "Mention rollback",
+                "expected_terms": ["rollback"],
+                "output": "Launch it.",
+                "trace": [{"name": "draft", "detail": "Wrote output."}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert main(["run", str(task_file), "--json"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+
+    assert payload["task"]["objective"] == "Mention rollback"
+    assert payload["evaluation"]["score"] == 0.0
+    assert payload["evaluation"]["missing_terms"] == ["rollback"]
+    assert payload["critiques"]
+    assert "improved_output" in payload
