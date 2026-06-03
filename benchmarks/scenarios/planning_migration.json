@@ -1,0 +1,28 @@
+{
+  "id": "planning_migration",
+  "category": "planning",
+  "objective": "Plan a migration with inventory, backup, validation.",
+  "expected_terms": [
+    "inventory",
+    "backup",
+    "validation"
+  ],
+  "constraints": [
+    "inventory",
+    "backup",
+    "validation"
+  ],
+  "output": "Move things over and probably test later.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read planning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

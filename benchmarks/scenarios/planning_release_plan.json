@@ -1,0 +1,28 @@
+{
+  "id": "planning_release_plan",
+  "category": "planning",
+  "objective": "Create a release plan with owner, timeline, rollback.",
+  "expected_terms": [
+    "owner",
+    "timeline",
+    "rollback"
+  ],
+  "constraints": [
+    "owner",
+    "timeline",
+    "rollback"
+  ],
+  "output": "Maybe release soon with some checks.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read planning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

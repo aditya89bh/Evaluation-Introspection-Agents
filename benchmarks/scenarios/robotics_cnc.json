@@ -1,0 +1,28 @@
+{
+  "id": "robotics_cnc",
+  "category": "robotics",
+  "objective": "Plan robot CNC loading with precondition, door, operator.",
+  "expected_terms": [
+    "precondition",
+    "door",
+    "operator"
+  ],
+  "constraints": [
+    "precondition",
+    "door",
+    "operator"
+  ],
+  "output": "Move arm to CNC and insert part.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read robotics scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

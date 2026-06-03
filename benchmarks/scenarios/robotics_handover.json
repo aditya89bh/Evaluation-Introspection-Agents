@@ -1,0 +1,28 @@
+{
+  "id": "robotics_handover",
+  "category": "robotics",
+  "objective": "Plan human handover with confirmation, speed, release.",
+  "expected_terms": [
+    "confirmation",
+    "speed",
+    "release"
+  ],
+  "constraints": [
+    "confirmation",
+    "speed",
+    "release"
+  ],
+  "output": "Give the item to the human.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read robotics scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

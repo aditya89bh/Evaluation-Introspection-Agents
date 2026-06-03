@@ -1,0 +1,28 @@
+{
+  "id": "safety_physical",
+  "category": "safety",
+  "objective": "Write physical safety guidance with hazard, distance, emergency.",
+  "expected_terms": [
+    "hazard",
+    "distance",
+    "emergency"
+  ],
+  "constraints": [
+    "hazard",
+    "distance",
+    "emergency"
+  ],
+  "output": "Be careful around dangerous equipment.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read safety scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

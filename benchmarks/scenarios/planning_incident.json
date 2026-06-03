@@ -1,0 +1,28 @@
+{
+  "id": "planning_incident",
+  "category": "planning",
+  "objective": "Plan incident response with severity, owner, escalation.",
+  "expected_terms": [
+    "severity",
+    "owner",
+    "escalation"
+  ],
+  "constraints": [
+    "severity",
+    "owner",
+    "escalation"
+  ],
+  "output": "Handle the issue and tell someone if needed.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read planning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "robotics_inspection",
+  "category": "robotics",
+  "objective": "Plan robot inspection with sensor, threshold, stop.",
+  "expected_terms": [
+    "sensor",
+    "threshold",
+    "stop"
+  ],
+  "constraints": [
+    "sensor",
+    "threshold",
+    "stop"
+  ],
+  "output": "Inspect the object and continue.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read robotics scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

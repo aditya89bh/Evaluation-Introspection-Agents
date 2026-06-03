@@ -1,0 +1,28 @@
+{
+  "id": "reasoning_debug",
+  "category": "reasoning",
+  "objective": "Debug failure with symptom, cause, fix.",
+  "expected_terms": [
+    "symptom",
+    "cause",
+    "fix"
+  ],
+  "constraints": [
+    "symptom",
+    "cause",
+    "fix"
+  ],
+  "output": "Restart it and see if things improve.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read reasoning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

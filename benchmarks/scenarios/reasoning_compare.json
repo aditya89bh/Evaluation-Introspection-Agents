@@ -1,0 +1,28 @@
+{
+  "id": "reasoning_compare",
+  "category": "reasoning",
+  "objective": "Compare options with criteria, tradeoff, recommendation.",
+  "expected_terms": [
+    "criteria",
+    "tradeoff",
+    "recommendation"
+  ],
+  "constraints": [
+    "criteria",
+    "tradeoff",
+    "recommendation"
+  ],
+  "output": "Option A is better for some reasons.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read reasoning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

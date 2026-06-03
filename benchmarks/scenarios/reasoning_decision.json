@@ -1,0 +1,28 @@
+{
+  "id": "reasoning_decision",
+  "category": "reasoning",
+  "objective": "Make decision with evidence, risk, next action.",
+  "expected_terms": [
+    "evidence",
+    "risk",
+    "next action"
+  ],
+  "constraints": [
+    "evidence",
+    "risk",
+    "next action"
+  ],
+  "output": "Choose the simple option maybe.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read reasoning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

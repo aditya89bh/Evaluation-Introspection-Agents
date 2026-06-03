@@ -1,0 +1,28 @@
+{
+  "id": "support_billing",
+  "category": "customer_support",
+  "objective": "Respond to billing concern with empathy, invoice, escalation.",
+  "expected_terms": [
+    "empathy",
+    "invoice",
+    "escalation"
+  ],
+  "constraints": [
+    "empathy",
+    "invoice",
+    "escalation"
+  ],
+  "output": "Send details and maybe billing can help.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read customer_support scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

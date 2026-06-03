@@ -1,0 +1,28 @@
+{
+  "id": "reasoning_math",
+  "category": "reasoning",
+  "objective": "Solve reasoning task with assumptions, steps, answer.",
+  "expected_terms": [
+    "assumptions",
+    "steps",
+    "answer"
+  ],
+  "constraints": [
+    "assumptions",
+    "steps",
+    "answer"
+  ],
+  "output": "The answer is probably 42.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read reasoning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

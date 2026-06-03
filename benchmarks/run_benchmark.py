@@ -10,7 +10,7 @@ from typing import Any
 from evaluation_introspection_agents.cli import load_task_file
 from evaluation_introspection_agents.core.feedback_loop import FeedbackLoop
 
-DEFAULT_TASK_DIR = Path("examples")
+DEFAULT_TASK_DIR = Path("benchmarks/scenarios")
 DEFAULT_REPORT_PATH = Path("benchmarks/benchmark_report.json")
 
 
@@ -25,6 +25,7 @@ def run_benchmark(task_dir: Path = DEFAULT_TASK_DIR) -> dict[str, Any]:
         cases.append(
             {
                 "task_file": str(task_file),
+                "category": json.loads(task_file.read_text(encoding="utf-8")).get("category", "uncategorized"),
                 "score": result.evaluation.score,
                 "passed": result.evaluation.score >= 0.8,
                 "improved_score": improved_result.score,

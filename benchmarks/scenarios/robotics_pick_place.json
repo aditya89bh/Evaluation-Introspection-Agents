@@ -1,0 +1,28 @@
+{
+  "id": "robotics_pick_place",
+  "category": "robotics",
+  "objective": "Plan pick-place with calibration, gripper, fallback.",
+  "expected_terms": [
+    "calibration",
+    "gripper",
+    "fallback"
+  ],
+  "constraints": [
+    "calibration",
+    "gripper",
+    "fallback"
+  ],
+  "output": "Pick the item and place it if things look okay.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read robotics scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

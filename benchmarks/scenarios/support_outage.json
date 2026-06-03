@@ -1,0 +1,28 @@
+{
+  "id": "support_outage",
+  "category": "customer_support",
+  "objective": "Respond to outage report with acknowledgement, status, follow-up.",
+  "expected_terms": [
+    "acknowledgement",
+    "status",
+    "follow-up"
+  ],
+  "constraints": [
+    "acknowledgement",
+    "status",
+    "follow-up"
+  ],
+  "output": "Thanks. Some things are broken.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read customer_support scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "planning_research",
+  "category": "planning",
+  "objective": "Plan research with hypothesis, method, deliverable.",
+  "expected_terms": [
+    "hypothesis",
+    "method",
+    "deliverable"
+  ],
+  "constraints": [
+    "hypothesis",
+    "method",
+    "deliverable"
+  ],
+  "output": "Do some research and write stuff.",
+  "trace": [
+    {
+      "name": "parse",
+      "detail": "Read planning scenario.",
+      "observation": "Expected terms were available."
+    },
+    {
+      "name": "draft",
+      "detail": "Generated deterministic candidate output.",
+      "observation": "Candidate may miss constraints."
+    }
+  ]
+}

@@ -1,42 +1,190 @@
 {
   "cases": [
     {
+      "category": "planning",
       "failure_count": 3,
       "improved": true,
       "improved_score": 1.0,
       "passed": false,
-      "score": 0.67,
-      "task_file": "examples/customer_support.json"
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/planning_incident.json"
     },
     {
+      "category": "planning",
       "failure_count": 4,
       "improved": true,
       "improved_score": 1.0,
       "passed": false,
       "score": 0.0,
-      "task_file": "examples/planning_task.json"
+      "task_file": "benchmarks/scenarios/planning_migration.json"
     },
     {
+      "category": "planning",
       "failure_count": 4,
       "improved": true,
       "improved_score": 1.0,
       "passed": false,
       "score": 0.0,
-      "task_file": "examples/robotics_decision.json"
+      "task_file": "benchmarks/scenarios/planning_release_plan.json"
     },
     {
+      "category": "planning",
       "failure_count": 4,
       "improved": true,
       "improved_score": 1.0,
       "passed": false,
-      "score": 0.67,
-      "task_file": "examples/safety_response.json"
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/planning_research.json"
+    },
+    {
+      "category": "reasoning",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/reasoning_compare.json"
+    },
+    {
+      "category": "reasoning",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/reasoning_debug.json"
+    },
+    {
+      "category": "reasoning",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/reasoning_decision.json"
+    },
+    {
+      "category": "reasoning",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.33,
+      "task_file": "benchmarks/scenarios/reasoning_math.json"
+    },
+    {
+      "category": "robotics",
+      "failure_count": 3,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/robotics_cnc.json"
+    },
+    {
+      "category": "robotics",
+      "failure_count": 3,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/robotics_handover.json"
+    },
+    {
+      "category": "robotics",
+      "failure_count": 3,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/robotics_inspection.json"
+    },
+    {
+      "category": "robotics",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/robotics_pick_place.json"
+    },
+    {
+      "category": "safety",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/safety_medical.json"
+    },
+    {
+      "category": "safety",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/safety_physical.json"
+    },
+    {
+      "category": "safety",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/safety_privacy.json"
+    },
+    {
+      "category": "safety",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/safety_security.json"
+    },
+    {
+      "category": "customer_support",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/support_billing.json"
+    },
+    {
+      "category": "customer_support",
+      "failure_count": 3,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/support_bug.json"
+    },
+    {
+      "category": "customer_support",
+      "failure_count": 4,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/support_outage.json"
+    },
+    {
+      "category": "customer_support",
+      "failure_count": 3,
+      "improved": true,
+      "improved_score": 1.0,
+      "passed": false,
+      "score": 0.0,
+      "task_file": "benchmarks/scenarios/support_refund.json"
     }
   ],
   "metrics": {
-    "average_score": 0.34,
-    "case_count": 4,
-    "failure_count": 15,
+    "average_score": 0.02,
+    "case_count": 20,
+    "failure_count": 74,
     "improvement_rate": 1.0,
     "pass_rate": 0.0
   }
