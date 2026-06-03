@@ -19,6 +19,8 @@ def test_multi_critic_evaluator_returns_configurable_consensus() -> None:
     assert set(result.critic_findings) == {"CriticA", "CriticB", "CriticC"}
     assert "Missing expected terms: rollback." in result.consensus
     assert "Failure mode: low objective coverage may cause task failure." in result.consensus
+    assert result.agreement_status == "disagreement"
+    assert "distinct actionable issues" in result.disagreement_report
 
 
 def test_multi_critic_accepts_configured_critic_list() -> None:
@@ -30,3 +32,15 @@ def test_multi_critic_accepts_configured_critic_list() -> None:
 
     assert tuple(result.critic_findings) == ("CriticA",)
     assert result.consensus == ("Missing expected terms: owner.",)
+    assert result.agreement_status == "agreement"
+
+
+def test_multi_critic_detects_partial_agreement() -> None:
+    """Disagreement analysis should detect partial agreement."""
+    evaluation = EvaluationResult(0.0, (), ("owner",), "Missing owner.")
+    introspection = IntrospectionResult("Trace", ("draft: x",), "trace", ())
+
+    result = MultiCriticEvaluator(critics=(CriticA(), CriticA(),)).evaluate(evaluation, introspection)
+
+    assert result.agreement_status == "agreement"
+    assert "All critics agreed" in result.disagreement_report

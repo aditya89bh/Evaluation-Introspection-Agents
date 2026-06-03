@@ -80,6 +80,8 @@ class MultiCriticResult:
 
     critic_findings: dict[str, tuple[str, ...]]
     consensus: tuple[str, ...]
+    agreement_status: str
+    disagreement_report: str
 
 
 class MultiCriticEvaluator:
@@ -98,10 +100,12 @@ class MultiCriticEvaluator:
         min_votes: int = 1,
     ) -> MultiCriticResult:
         """Run critics and return findings with vote-based consensus."""
-        critic_findings = {
-            critic.name: critic.critique(evaluation, introspection, output, constraints)
-            for critic in self.critics
-        }
+        critic_findings: dict[str, tuple[str, ...]] = {}
+        name_counts: dict[str, int] = {}
+        for critic in self.critics:
+            name_counts[critic.name] = name_counts.get(critic.name, 0) + 1
+            display_name = critic.name if name_counts[critic.name] == 1 else f"{critic.name}#{name_counts[critic.name]}"
+            critic_findings[display_name] = critic.critique(evaluation, introspection, output, constraints)
         counts: dict[str, int] = {}
         for findings in critic_findings.values():
             for finding in findings:
@@ -109,4 +113,21 @@ class MultiCriticEvaluator:
                     continue
                 counts[finding] = counts.get(finding, 0) + 1
         consensus = tuple(finding for finding, count in sorted(counts.items()) if count >= min_votes)
-        return MultiCriticResult(critic_findings=critic_findings, consensus=consensus)
+        agreement_status, disagreement_report = self.analyze_disagreement(counts, len(self.critics))
+        return MultiCriticResult(
+            critic_findings=critic_findings,
+            consensus=consensus,
+            agreement_status=agreement_status,
+            disagreement_report=disagreement_report,
+        )
+
+    def analyze_disagreement(self, counts: dict[str, int], critic_count: int) -> tuple[str, str]:
+        """Classify critic agreement from finding vote counts."""
+        if not counts:
+            return "agreement", "All critics found no actionable issues."
+        max_votes = max(counts.values())
+        if max_votes == critic_count:
+            return "agreement", "All critics agreed on at least one actionable issue."
+        if max_votes > 1:
+            return "partial agreement", "Some critics agreed, but at least one critic raised distinct issues."
+        return "disagreement", "Critics raised distinct actionable issues with no overlapping findings."
