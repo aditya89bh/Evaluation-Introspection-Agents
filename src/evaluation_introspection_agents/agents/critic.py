@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from evaluation_introspection_agents.agents.evaluator import EvaluationResult
 from evaluation_introspection_agents.agents.introspector import IntrospectionResult
 
@@ -22,6 +24,7 @@ class CriticAgent:
         """Return deterministic critique points from feedback, output, and constraints."""
         critiques: list[str] = []
         lowered_output = output.lower()
+        output_tokens = set(re.findall(r"[a-z]+", lowered_output))
 
         if evaluation.missing_terms:
             missing = ", ".join(evaluation.missing_terms)
@@ -33,7 +36,7 @@ class CriticAgent:
         if missing_constraints:
             critiques.append(f"Missing constraints: {', '.join(missing_constraints)}.")
 
-        vague_found = tuple(term for term in self.vague_terms if f" {term} " in f" {lowered_output} ")
+        vague_found = tuple(term for term in self.vague_terms if term in output_tokens)
         if vague_found:
             critiques.append(f"Vague statements detected: {', '.join(vague_found)}.")
 
